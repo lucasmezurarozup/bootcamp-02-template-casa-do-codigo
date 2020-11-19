@@ -45,4 +45,19 @@ public class Autor {
         return this.dataCriacao;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getNome() {
+        return nome;
+    }
 }
