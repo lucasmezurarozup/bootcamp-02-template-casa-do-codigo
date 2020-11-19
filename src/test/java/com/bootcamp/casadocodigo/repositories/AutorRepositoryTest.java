@@ -2,6 +2,7 @@ package com.bootcamp.casadocodigo.repositories;
 
 import com.bootcamp.casadocodigo.entities.Autor;
 import org.assertj.core.api.Assertions;
+import org.hibernate.JDBCException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,6 +109,18 @@ public class AutorRepositoryTest {
     public void tentativaRegistrarAutorComSucesso() {
         autorRepository.save(autor);
         Assertions.assertThat(autorRepository.findAll()).hasSize(1);
+    }
+
+    @Test
+    public void testandoValidacaoDuplicacaoAutor() {
+        autorRepository.save(autor);
+        Assertions.assertThat(autorRepository.findAll()).hasSize(1);
+
+        try {
+            autorRepository.save(autor);
+        }catch(JDBCException exception) {
+            Assertions.assertThat(exception).isInstanceOf(JDBCException.class);
+        }
     }
 
 }
