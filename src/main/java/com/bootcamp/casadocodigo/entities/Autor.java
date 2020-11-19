@@ -20,15 +20,12 @@ public class Autor {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotBlank
-    @NotNull(message = "Nome é um campo de preenchimento obrigatório")
+    @NotBlank(message = "Nome é um campo de preenchimento obrigatório")
     private String nome;
-    @NotBlank
+    @NotBlank(message = "Email é um campo de preenchimento obrigatório")
     @Email
-    @NotNull(message = "Email é um campo de preenchimento obrigatório")
     private String email;
-    @NotBlank
-    @NotNull(message = "Descrição é um campo de preenchimento obrigatório")
+    @NotBlank(message = "Descrição é um campo de preenchimento obrigatório")
     @Size(max = 400)
     private String descricao;
     private LocalDateTime dataCriacao = LocalDateTime.now();
