@@ -44,4 +44,8 @@ public class Autor {
         this.descricao = descricao;
     }
 
+    public LocalDateTime getDataCriacao() {
+        return this.dataCriacao;
+    }
+
 }

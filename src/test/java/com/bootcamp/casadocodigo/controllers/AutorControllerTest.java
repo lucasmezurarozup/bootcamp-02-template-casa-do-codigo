@@ -1,4 +1,4 @@
-package com.bootcamp.casadocodigo;
+package com.bootcamp.casadocodigo.controllers;
 
 import com.bootcamp.casadocodigo.controllers.AutorController;
 import com.bootcamp.casadocodigo.dtos.CadastrarAutorRequest;
@@ -12,6 +12,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.Assert;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -123,6 +127,19 @@ public class AutorControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cadastrarAutorRequest)))
                 .andDo(print()).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testandoCampoObrigatorioDataCriacaoNaoNulo() throws Exception {
+        cadastrarAutorRequest = new CadastrarAutorRequest("lucas", "lucas.mezuraro@zup.com.br", "Teste");
+        Optional<LocalDateTime> dataCriacao = Optional.ofNullable(cadastrarAutorRequest.toObject().getDataCriacao());
+        mockMvc.perform(post("/autor/registrar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cadastrarAutorRequest)))
+                .andDo(print()).andExpect(status().is2xxSuccessful());
+
+        Assert.notNull(dataCriacao, "");
+
     }
 
 
