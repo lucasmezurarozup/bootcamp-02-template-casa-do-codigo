@@ -32,7 +32,6 @@ public class CadastrarAutorRequest {
 
     }
 
-
     public Autor toObject() {
         return new Autor(this.nome, this.email, this.descricao);
     }

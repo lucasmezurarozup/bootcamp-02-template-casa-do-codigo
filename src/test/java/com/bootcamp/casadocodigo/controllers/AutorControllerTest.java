@@ -133,13 +133,18 @@ public class AutorControllerTest {
     public void testandoCampoObrigatorioDataCriacaoNaoNulo() throws Exception {
         cadastrarAutorRequest = new CadastrarAutorRequest("lucas", "lucas.mezuraro@zup.com.br", "Teste");
         Optional<LocalDateTime> dataCriacao = Optional.ofNullable(cadastrarAutorRequest.toObject().getDataCriacao());
+
+        Assert.notNull(dataCriacao, "");
+
+    }
+
+    @Test
+    public void testandoCondicaoDeSucessoRegistrandoAutor() throws Exception {
+        cadastrarAutorRequest = new CadastrarAutorRequest("lucas", "lucas.mezuraro@zup.com.br", "Teste");
         mockMvc.perform(post("/autor/registrar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cadastrarAutorRequest)))
                 .andDo(print()).andExpect(status().is2xxSuccessful());
-
-        Assert.notNull(dataCriacao, "");
-
     }
 
 
