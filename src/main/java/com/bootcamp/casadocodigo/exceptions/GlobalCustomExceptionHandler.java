@@ -46,7 +46,7 @@ public class GlobalCustomExceptionHandler extends ResponseEntityExceptionHandler
         body.put("status", 400);
         body.put("path", request.getRequestURI().toString());
         List<Erro> errors = new ArrayList<>();
-        errors.add(new Erro(ex.getConstraintName(), "o campo "+ ex.getConstraintName()+ " com o registro fornecido já existe em nosso banco de dados!"));
+        errors.add(new Erro(ex.getConstraintName(), "o campo "+ ex.getConstraintName()+ " com o valor fornecido já existe em nosso banco de dados!"));
         body.put("errors", errors);
         return ResponseEntity.badRequest().body(body);
     }
