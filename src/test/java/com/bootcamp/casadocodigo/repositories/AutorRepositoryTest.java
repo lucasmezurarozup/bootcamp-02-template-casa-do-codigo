@@ -118,8 +118,9 @@ public class AutorRepositoryTest {
 
         try {
             autorRepository.save(autor);
-        }catch(JDBCException exception) {
-            Assertions.assertThat(exception).isInstanceOf(JDBCException.class);
+        }catch(ConstraintViolationException exception) {
+            Assertions.assertThat(exception).isInstanceOf(ConstraintViolationException.class);
+            Assertions.assertThat(exception.getMessage()).contains("o email com o registro fornecido já consta em nosso banco de dados!");
         }
     }
 
