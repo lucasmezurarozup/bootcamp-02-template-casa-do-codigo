@@ -1,18 +1,25 @@
-package com.bootcamp.casadocodigo.dtos;
+package com.bootcamp.casadocodigo.entities;
 
-import com.bootcamp.casadocodigo.entities.Autor;
-import com.bootcamp.casadocodigo.entities.Categoria;
-import com.bootcamp.casadocodigo.entities.Livro;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.util.Assert;
 
-import javax.persistence.EntityManager;
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
-public class CadastrarLivroRequest {
+@Entity
+@Table(
+        name = "livros",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"titulo"}, name = "titulo"),
+                @UniqueConstraint(columnNames = {"isbn"}, name = "isbn")
+        }
+)
+public class Livro {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @NotBlank(message = "título é um campo de preenchimento obrigatório.")
     private String titulo;
@@ -22,34 +29,28 @@ public class CadastrarLivroRequest {
     @NotBlank(message = "sumário é um campo de preenchimento obrigatório.")
     private String sumario;
     @NotNull(message = "preço é um campo de preenchimento obrigatório.")
-    @DecimalMin(value = "20", message = "o preço deve ser maior que 20 reais.")
+    @Min(20)
     private BigDecimal preco;
     @NotNull(message = "número de páginas é um campo de preenchimento obrigatório.")
-    @Min(value = 100, message = "O livro deve ter mais de 100 páginas.")
+    @Min(100)
     private Integer numeroPaginas;
     @NotBlank(message = "ISBN é um campo de preenchimento obrigatório.")
     private String isbn;
 
     @Future
     @NotNull(message = "data de publicação é um campo de preenchimento obrigatório.")
+    @JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING)
     private LocalDate dataPublicacao;
 
     @NotNull(message = "catégoria é um campo de preenchimento obrigatório.")
-    private Long idCategoria;
+    @ManyToOne
+    private Categoria categoria;
 
     @NotNull(message = "autor é um campo de preenchimento obrigatório.")
-    private Long idAutor;
+    @ManyToOne
+    private Autor autor;
 
-    public CadastrarLivroRequest(
-            String titulo,
-            String resumo,
-            String sumario,
-            BigDecimal preco,
-            Integer numeroPaginas,
-            String isbn,
-            LocalDate dataPublicacao,
-            Long idCategoria,
-            Long idAutor) {
+    public Livro(String titulo, String resumo, String sumario, BigDecimal preco, Integer numeroPaginas, String isbn, LocalDate dataPublicacao, Categoria categoria, Autor autor) {
         this.titulo = titulo;
         this.resumo = resumo;
         this.sumario = sumario;
@@ -57,16 +58,12 @@ public class CadastrarLivroRequest {
         this.numeroPaginas = numeroPaginas;
         this.isbn = isbn;
         this.dataPublicacao = dataPublicacao;
-        this.idCategoria = idCategoria;
-        this.idAutor = idAutor;
+        this.categoria = categoria;
+        this.autor = autor;
     }
 
-    public void setDataPublicacao(LocalDate dataPublicacao) {
-        this.dataPublicacao = dataPublicacao;
-    }
-
-    public void setPreco(BigDecimal preco) {
-        this.preco = preco;
+    public Long getId() {
+        return id;
     }
 
     public String getTitulo() {
@@ -97,14 +94,11 @@ public class CadastrarLivroRequest {
         return dataPublicacao;
     }
 
-    public Livro toObject(EntityManager entityManager) {
+    public Categoria getCategoria() {
+        return categoria;
+    }
 
-        Categoria categoria = entityManager.find(Categoria.class, this.idCategoria);
-        Autor autor = entityManager.find(Autor.class, this.idAutor);
-
-        Assert.notNull(categoria, "categoria é um campo obrigatório.");
-        Assert.notNull(autor, "autor é um campo obrigatório.");
-
-        return new Livro(this.titulo, this.resumo, this.sumario, this.preco, this.numeroPaginas, this.isbn, this.dataPublicacao, categoria, autor);
+    public Autor getAutor() {
+        return autor;
     }
 }

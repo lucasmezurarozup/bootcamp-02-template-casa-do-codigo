@@ -1,5 +1,7 @@
 package com.bootcamp.casadocodigo.controllers;
 
+import com.bootcamp.casadocodigo.dtos.CadastrarAutorRequest;
+import com.bootcamp.casadocodigo.dtos.CadastrarCategoriaRequest;
 import com.bootcamp.casadocodigo.dtos.CadastrarLivroRequest;
 import com.bootcamp.casadocodigo.entities.Autor;
 import com.bootcamp.casadocodigo.entities.Categoria;
@@ -32,6 +34,9 @@ public class LivroControllerTest {
 
     private CadastrarLivroRequest cadastrarLivroRequest;
 
+    private CadastrarAutorRequest cadastrarAutorRequest;
+    private CadastrarCategoriaRequest cadastrarCategoriaRequest;
+
     @BeforeEach
     public void init() {
         cadastrarLivroRequest = new CadastrarLivroRequest(
@@ -42,22 +47,47 @@ public class LivroControllerTest {
                 156,
                 "1000-0000-0000",
                 LocalDate.of(2025, 10, 10),
-                new Categoria("Web"),
-                new Autor("Lucas", "lucas.mezuraro@zup.com.br", "Autor sobre web")
-        );
+                1l,
+                1l);
+
+        cadastrarAutorRequest = new CadastrarAutorRequest("lucas", "lucas.mezuraro@zup.com.br", "desc");
+        cadastrarCategoriaRequest = new CadastrarCategoriaRequest();
+        cadastrarCategoriaRequest.setNome("Java");
+    }
+
+    public CadastrarLivroRequest testCadastrar(
+            String titulo,
+            String resumo,
+            String sumario,
+            BigDecimal preco,
+            Integer numeroPaginas,
+            String isbn,
+            LocalDate dataPublicacao,
+            Long idCategoria,
+            Long idAutor) {
+
+        return new CadastrarLivroRequest(titulo,
+                resumo,
+                sumario,
+                preco,
+                numeroPaginas,
+                isbn,
+                dataPublicacao,
+                idCategoria,
+                idAutor);
     }
 
     @Test
     public void testandoInsercaoComTituloNulo() throws Exception {
-        cadastrarLivroRequest = new CadastrarLivroRequest(null,
+        cadastrarLivroRequest = testCadastrar(null,
                 "É um livro sobre web, java, e outras coisas",
                 "1 - Web, 2 - Http",
                 BigDecimal.valueOf(29.90),
                 156,
                 "1000-0000-0000",
                 LocalDate.of(2025, 10, 10),
-                new Categoria("Web"),
-                new Autor("Lucas", "lucas.mezuraro@zup.com.br", "Autor sobre web"));
+                1l,
+                1l);
         mockMvc.perform(post("/livro/registrar")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
@@ -66,15 +96,15 @@ public class LivroControllerTest {
 
     @Test
     public void testandoInsercaoComResumoNulo() throws Exception {
-        cadastrarLivroRequest = new CadastrarLivroRequest("Java",
+        cadastrarLivroRequest = testCadastrar("Java",
                 null,
                 "1 - Web, 2 - Http",
                 BigDecimal.valueOf(29.90),
                 156,
                 "1000-0000-0000",
                 LocalDate.of(2025, 10, 10),
-                new Categoria("Web"),
-                new Autor("Lucas", "lucas.mezuraro@zup.com.br", "Autor sobre web"));
+                1l,
+                1l);
         mockMvc.perform(post("/livro/registrar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
@@ -83,15 +113,15 @@ public class LivroControllerTest {
 
     @Test
     public void testandoInsercaoComSumarioNulo() throws Exception {
-        cadastrarLivroRequest = new CadastrarLivroRequest("Java",
+        cadastrarLivroRequest = testCadastrar("Java",
                 "É um livro sobre web, java, e outras coisas",
                 null,
                 BigDecimal.valueOf(29.90),
                 156,
                 "1000-0000-0000",
                 LocalDate.of(2025, 10, 10),
-                new Categoria("Web"),
-                new Autor("Lucas", "lucas.mezuraro@zup.com.br", "Autor sobre web"));
+                1l,
+                1l);
         mockMvc.perform(post("/livro/registrar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
@@ -100,15 +130,15 @@ public class LivroControllerTest {
 
     @Test
     public void testandoInsercaoComPrecoNulo() throws Exception {
-        cadastrarLivroRequest = new CadastrarLivroRequest("Java",
+        cadastrarLivroRequest = testCadastrar("Java",
                 "É um livro sobre web, java, e outras coisas",
                 "1 - Web, 2 - Http",
                 null,
                 156,
                 "1000-0000-0000",
                 LocalDate.of(2025, 10, 10),
-                new Categoria("Web"),
-                new Autor("Lucas", "lucas.mezuraro@zup.com.br", "Autor sobre web"));
+                1l,
+                1l);
         mockMvc.perform(post("/livro/registrar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
@@ -117,15 +147,15 @@ public class LivroControllerTest {
 
     @Test
     public void testandoInsercaoComNumeroPaginasNulo() throws Exception {
-        cadastrarLivroRequest = new CadastrarLivroRequest("Java",
+        cadastrarLivroRequest = testCadastrar("Java",
                 "É um livro sobre web, java, e outras coisas",
                 "1 - Web, 2 - Http",
                 BigDecimal.valueOf(29.90),
                 null,
                 "1000-0000-0000",
                 LocalDate.of(2025, 10, 10),
-                new Categoria("Web"),
-                new Autor("Lucas", "lucas.mezuraro@zup.com.br", "Autor sobre web"));
+                1l,
+                1l);
         mockMvc.perform(post("/livro/registrar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
@@ -134,15 +164,15 @@ public class LivroControllerTest {
 
     @Test
     public void testandoInsercaoComIsbnNulo() throws Exception {
-        cadastrarLivroRequest = new CadastrarLivroRequest("Java",
+        cadastrarLivroRequest = testCadastrar("Java",
                 "É um livro sobre web, java, e outras coisas",
                 "1 - Web, 2 - Http",
                 BigDecimal.valueOf(29.90),
                 156,
                 null,
                 LocalDate.of(2025, 10, 10),
-                new Categoria("Web"),
-                new Autor("Lucas", "lucas.mezuraro@zup.com.br", "Autor sobre web"));
+                1l,
+                1l);
         mockMvc.perform(post("/livro/registrar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
@@ -151,15 +181,15 @@ public class LivroControllerTest {
 
     @Test
     public void testandoInsercaoComDataPublicacaoNulo() throws Exception {
-        cadastrarLivroRequest = new CadastrarLivroRequest("Java",
+        cadastrarLivroRequest = testCadastrar("Java",
                 "É um livro sobre web, java, e outras coisas",
                 "1 - Web, 2 - Http",
                 BigDecimal.valueOf(29.90),
                 156,
                 "1000-0000-0000",
                 null,
-                new Categoria("Web"),
-                new Autor("Lucas", "lucas.mezuraro@zup.com.br", "Autor sobre web"));
+                1l,
+                1l);
         mockMvc.perform(post("/livro/registrar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
@@ -168,7 +198,7 @@ public class LivroControllerTest {
 
     @Test
     public void testandoInsercaoComCategoriaNulo() throws Exception {
-        cadastrarLivroRequest = new CadastrarLivroRequest("Java",
+        cadastrarLivroRequest = testCadastrar("Java",
                 "É um livro sobre web, java, e outras coisas",
                 "1 - Web, 2 - Http",
                 BigDecimal.valueOf(29.90),
@@ -176,7 +206,7 @@ public class LivroControllerTest {
                 "1000-0000-0000",
                 LocalDate.of(2025, 10, 10),
                 null,
-                new Autor("Lucas", "lucas.mezuraro@zup.com.br", "Autor sobre web"));
+                1l);
         mockMvc.perform(post("/livro/registrar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
@@ -185,15 +215,34 @@ public class LivroControllerTest {
 
     @Test
     public void testandoInsercaoComAutorNulo() throws Exception {
-        cadastrarLivroRequest = new CadastrarLivroRequest("Java",
+        cadastrarLivroRequest = testCadastrar("Java",
                 "É um livro sobre web, java, e outras coisas",
                 "1 - Web, 2 - Http",
                 BigDecimal.valueOf(29.90),
                 156,
                 "1000-0000-0000",
                 LocalDate.of(2025, 10, 10),
-                new Categoria("Web"),
+                1l,
                 null);
+        mockMvc.perform(post("/livro/registrar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testandoInsercaoComPrecoMenorQue20() throws Exception {
+
+        cadastrarLivroRequest = testCadastrar("Java",
+                "É um livro sobre web, java, e outras coisas",
+                "1 - Web, 2 - Http",
+                BigDecimal.valueOf(19.90),
+                156,
+                "1000-0000-0000",
+                LocalDate.of(2025, 10, 10),
+                1l,
+                1l);
+
         mockMvc.perform(post("/livro/registrar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
