@@ -2,7 +2,6 @@ package com.bootcamp.casadocodigo.controllers;
 
 import com.bootcamp.casadocodigo.dtos.CadastrarAutorRequest;
 import com.bootcamp.casadocodigo.entities.Autor;
-import com.bootcamp.casadocodigo.exceptions.EmailDuplicadoException;
 import com.bootcamp.casadocodigo.repositories.AutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
