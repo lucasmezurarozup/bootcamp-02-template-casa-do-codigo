@@ -4,9 +4,15 @@ import com.bootcamp.casadocodigo.entities.Autor;
 import com.bootcamp.casadocodigo.entities.Categoria;
 import com.bootcamp.casadocodigo.entities.Livro;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -32,6 +38,7 @@ public class CadastrarLivroRequest {
 
     @Future
     @NotNull(message = "data de publicação é um campo de preenchimento obrigatório.")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataPublicacao;
 
     @NotNull(message = "catégoria é um campo de preenchimento obrigatório.")

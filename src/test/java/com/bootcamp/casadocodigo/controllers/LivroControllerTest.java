@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAccessor;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -248,4 +249,85 @@ public class LivroControllerTest {
                 .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void testandoInsercaoComNumeroPaginasMenorQue100() throws Exception {
+
+        cadastrarLivroRequest = testCadastrar("Java",
+                "É um livro sobre web, java, e outras coisas",
+                "1 - Web, 2 - Http",
+                BigDecimal.valueOf(19.90),
+                90,
+                "1000-0000-0000",
+                LocalDate.of(2025, 10, 10),
+                1l,
+                1l);
+
+        mockMvc.perform(post("/livro/registrar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testandoInsercaoComResumoMaiorQue500Caracteres() throws Exception {
+
+        cadastrarLivroRequest = testCadastrar("Java",
+                "É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas" +
+                        "É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas" +
+                        "É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas" +
+                        "É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas" +
+                        "É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas" +
+                        "É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas" +
+                        "É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas" +
+                        "É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas",
+                "1 - Web, 2 - Http",
+                BigDecimal.valueOf(19.90),
+                156,
+                "1000-0000-0000",
+                LocalDate.of(2025, 10, 10),
+                1l,
+                1l);
+
+        mockMvc.perform(post("/livro/registrar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testandoInsercaoComDadosCorretos() throws Exception {
+
+        cadastrarAutorRequest = new CadastrarAutorRequest("lucas2", "lucas.mezuraro2@zup.com.br", "Teste");
+        mockMvc.perform(post("/autor/registrar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cadastrarAutorRequest)))
+                .andDo(print()).andExpect(status().is2xxSuccessful());
+
+        cadastrarCategoriaRequest.
+                setNome("JavaWeb");
+        mockMvc.perform(
+                post("/categoria/registrar")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cadastrarCategoriaRequest)))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+
+
+        cadastrarLivroRequest = testCadastrar("Java2",
+                "É um livro sobre web, java, e outras coisas",
+                "1 - Web, 2 - Http",
+                BigDecimal.valueOf(29.90),
+                156,
+                "1000-0000-0000",
+                LocalDate.of(2025, 10, 10),
+                3l,
+                3l);
+        mockMvc.perform(post("/livro/registrar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
+                .andExpect(status().is2xxSuccessful());
+    }
+
+
 }
