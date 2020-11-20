@@ -1,25 +1,25 @@
 package com.bootcamp.casadocodigo.exceptions;
 
-import org.hibernate.JDBCException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalCustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
@@ -38,15 +38,16 @@ public class GlobalCustomExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(body, headers, status);
     }
 
-    /*@Order(Ordered.HIGHEST_PRECEDENCE)
-    @ExceptionHandler({DataIntegrityViolationException.class})
-    protected ResponseEntity<Object> handleMethodIntegrityConstraint(DataIntegrityViolationException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+    @ExceptionHandler({ConstraintViolationException.class})
+    public ResponseEntity<?> conflity(ConstraintViolationException ex, HttpServletRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
-        body.put("status", status.value());
+        body.put("status", 400);
+        body.put("path", request.getRequestURI().toString());
         List<Erro> errors = new ArrayList<>();
-        errors.add(new Erro(ex.getMessage(), ex.getMessage()));
+        errors.add(new Erro(ex.getConstraintName(), "o campo "+ ex.getConstraintName()+ " com o registro fornecido já existe em nosso banco de dados!"));
         body.put("errors", errors);
-        return new ResponseEntity<>(body, headers, status);
-    }*/
+        return ResponseEntity.badRequest().body(body);
+    }
 }
