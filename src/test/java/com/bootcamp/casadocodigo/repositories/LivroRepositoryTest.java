@@ -4,6 +4,7 @@ import com.bootcamp.casadocodigo.entities.Autor;
 import com.bootcamp.casadocodigo.entities.Categoria;
 import com.bootcamp.casadocodigo.entities.Livro;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +20,21 @@ public class LivroRepositoryTest {
     @Autowired
     private LivroRepository livroRepository;
 
-    private Livro livro;
+    @Autowired
+    private AutorRepository autorRepository;
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    private Livro livro;
     private Autor autor;
     private Categoria categoria;
 
     @BeforeEach
     public void init() {
-        autor = new Autor("lucas", "lucas.mezuraro@zup.com.br", "test");
-        categoria = new Categoria("Java");
         livro = new Livro("titulo", "resumo", "sumario", BigDecimal.valueOf(29.90), 200, "10910902190", LocalDate.of(2021, 02, 02), categoria, autor);
+        autor = autorRepository.save(new Autor("lucas", "lucas.mezuraro@zup.com.br", "test"));
+        categoria = categoriaRepository.save(new Categoria("Java"));
     }
 
     @Test
@@ -114,6 +120,97 @@ public class LivroRepositoryTest {
     @Test
     public void testandoInsercaoLivroComAutorNulo() {
         livro = new Livro("titulo", "resumo", "sumario", BigDecimal.valueOf(29.90), 200, "10910902190", LocalDate.of(2021, 02, 02), categoria, null);
+        try {
+            this.livroRepository.save(livro);
+        } catch (Exception exception) {
+            Assertions.assertThat(exception).isEqualTo(ConstraintViolationException.class);
+        }
+    }
+
+    @Test
+    public void testandoInsercaoLivroComNomeDuplicado() {
+        this.livroRepository.save(livro);
+        try {
+            livro = new Livro("titulo", "resumo", "sumario", BigDecimal.valueOf(29.90), 200, "10910902191", LocalDate.of(2021, 02, 02), categoria, autor);
+            this.livroRepository.save(livro);
+        } catch (Exception exception) {
+            Assertions.assertThat(exception).isEqualTo(ConstraintViolationException.class);
+        }
+    }
+
+    @Test
+    public void testandoInsercaoLivroComIsbnDuplicado() {
+        this.livroRepository.save(livro);
+        try {
+            livro = new Livro("titulo2", "resumo", "sumario", BigDecimal.valueOf(29.90), 200, "10910902190", LocalDate.of(2021, 02, 02), categoria, autor);
+            this.livroRepository.save(livro);
+        } catch (Exception exception) {
+            Assertions.assertThat(exception).isEqualTo(ConstraintViolationException.class);
+        }
+    }
+
+    @Test
+    public void testandoInsercaoLivroComNumeroPaginasMenorQue100() {
+        try {
+            livro = new Livro("titulo2", "resumo", "sumario", BigDecimal.valueOf(29.90), 50, "10910902190", LocalDate.of(2021, 02, 02), categoria, autor);
+            this.livroRepository.save(livro);
+        } catch (Exception exception) {
+            Assertions.assertThat(exception).isEqualTo(ConstraintViolationException.class);
+        }
+    }
+
+    @Test
+    public void testandoInsercaoLivroComDataPublicacaoNoPassado() {
+        try {
+            livro = new Livro("titulo2",
+                    "resumo",
+                    "sumario",
+                    BigDecimal.valueOf(29.90),
+                    50,
+                    "10910902190",
+                    LocalDate.of(2011, 02, 02), categoria, autor);
+            this.livroRepository.save(livro);
+        } catch (Exception exception) {
+            Assertions.assertThat(exception).isEqualTo(ConstraintViolationException.class);
+        }
+    }
+
+    @Test
+    public void testandoInsercaoLivroComPrecoMenorQue20() {
+        try {
+            livro = new Livro("titulo2",
+                    "resumo",
+                    "sumario",
+                    BigDecimal.valueOf(19.90),
+                    50,
+                    "10910902190",
+                    LocalDate.of(2011, 02, 02), categoria, autor);
+            this.livroRepository.save(livro);
+        } catch (Exception exception) {
+            Assertions.assertThat(exception).isEqualTo(ConstraintViolationException.class);
+        }
+    }
+
+    @Test
+    public void testandoInsercaoLivroComResumoMaiorQue500Caracteres() {
+
+
+
+        livro = new Livro("titulo", "É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas\" +\n" +
+                "                        \"É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas\" +\n" +
+                "                        \"É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas\" +\n" +
+                "                        \"É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas\" +\n" +
+                "                        \"É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas\" +\n" +
+                "                        \"É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas\" +\n" +
+                "                        \"É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas\" +\n" +
+                "                        \"É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas, É um livro sobre web, java, e outras coisas\"",
+                "sumario",
+                BigDecimal.valueOf(29.90),
+                200,
+                "10910902190",
+                LocalDate.of(2021, 02, 02),
+                categoria,
+                autor);
         try {
             this.livroRepository.save(livro);
         } catch (Exception exception) {
