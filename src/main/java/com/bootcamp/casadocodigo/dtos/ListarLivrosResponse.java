@@ -9,7 +9,7 @@ public class ListarLivrosResponse {
     @NotNull
     private Long id;
 
-    public ListarLivrosResponse(@NotBlank String titulo, @NotNull Long id) {
+    public ListarLivrosResponse(@NotNull Long id, @NotBlank String titulo) {
         this.titulo = titulo;
         this.id = id;
     }
