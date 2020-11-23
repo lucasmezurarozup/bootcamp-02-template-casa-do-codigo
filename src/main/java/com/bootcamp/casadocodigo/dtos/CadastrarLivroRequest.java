@@ -104,13 +104,21 @@ public class CadastrarLivroRequest {
         return dataPublicacao;
     }
 
+    public Long getIdAutor() {
+        return idAutor;
+    }
+
+    public Long getIdCategoria() {
+        return idCategoria;
+    }
+
     public Livro toObject(EntityManager entityManager) {
 
         Categoria categoria = entityManager.find(Categoria.class, this.idCategoria);
         Autor autor = entityManager.find(Autor.class, this.idAutor);
 
-        Assert.notNull(categoria, "categoria é um campo obrigatório.");
-        Assert.notNull(autor, "autor é um campo obrigatório.");
+        Assert.notNull(categoria, "a categoria deve estar previamente cadastrada.");
+        Assert.notNull(autor, "o/a autor/(a) deve estar previamente cadastrado/(a).");
 
         return new Livro(this.titulo, this.resumo, this.sumario, this.preco, this.numeroPaginas, this.isbn, this.dataPublicacao, categoria, autor);
     }

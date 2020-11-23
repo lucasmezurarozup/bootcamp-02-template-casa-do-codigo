@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -25,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class LivroControllerTest {
 
     @Autowired
@@ -40,7 +43,7 @@ public class LivroControllerTest {
 
     @BeforeEach
     public void init() {
-        cadastrarLivroRequest = new CadastrarLivroRequest(
+        cadastrarLivroRequest = testCadastrar(
                 "Livro sobre web",
                 "É um livro sobre web, java, e outras coisas",
                 "1 - Web, 2 - Http",
@@ -49,7 +52,7 @@ public class LivroControllerTest {
                 "1000-0000-0000",
                 LocalDate.of(2025, 10, 10),
                 1l,
-                1l);
+                2l);
 
         cadastrarAutorRequest = new CadastrarAutorRequest("lucas", "lucas.mezuraro@zup.com.br", "desc");
         cadastrarCategoriaRequest = new CadastrarCategoriaRequest();
@@ -66,6 +69,7 @@ public class LivroControllerTest {
             LocalDate dataPublicacao,
             Long idCategoria,
             Long idAutor) {
+
 
         return new CadastrarLivroRequest(titulo,
                 resumo,
@@ -305,7 +309,7 @@ public class LivroControllerTest {
                 .andDo(print()).andExpect(status().is2xxSuccessful());
 
         cadastrarCategoriaRequest.
-                setNome("JavaWeb");
+                setNome("Spring");
         mockMvc.perform(
                 post("/categoria/registrar")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -313,19 +317,20 @@ public class LivroControllerTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
+        Thread.sleep(2000);
 
-        cadastrarLivroRequest = testCadastrar("Java2",
+        CadastrarLivroRequest cadastrarLivroRequest2 = new CadastrarLivroRequest("Java2",
                 "É um livro sobre web, java, e outras coisas",
                 "1 - Web, 2 - Http",
                 BigDecimal.valueOf(29.90),
                 156,
                 "1000-0000-0000",
                 LocalDate.of(2025, 10, 10),
-                3l,
-                3l);
+                2l,
+                1l);
         mockMvc.perform(post("/livro/registrar")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(cadastrarLivroRequest)))
+                .content(objectMapper.writeValueAsString(cadastrarLivroRequest2)))
                 .andExpect(status().is2xxSuccessful());
     }
 

@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Validated
 @RestController
@@ -24,5 +25,11 @@ public class AutorController {
     public ResponseEntity<?> registrarAutor(@Valid @RequestBody CadastrarAutorRequest cadastrarAutorRequest) {
         Autor autor = autorRepository.save(cadastrarAutorRequest.toObject());
         return ResponseEntity.ok(autor);
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<?> retornaTodosAutores() {
+        List<Autor> autores = autorRepository.findAll();
+        return ResponseEntity.ok(autores);
     }
 }
