@@ -1,5 +1,7 @@
 package com.bootcamp.casadocodigo.dtos;
 
+import com.bootcamp.casadocodigo.entities.Pais;
+
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 
@@ -14,5 +16,9 @@ public class CadastrarPaisRequest {
 
     public String getNome() {
         return nome;
+    }
+
+    public Pais toObject() {
+        return new Pais(this.nome);
     }
 }

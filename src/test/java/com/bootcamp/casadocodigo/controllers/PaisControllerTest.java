@@ -2,6 +2,7 @@ package com.bootcamp.casadocodigo.controllers;
 
 import com.bootcamp.casadocodigo.dtos.CadastrarPaisRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,10 +28,24 @@ public class PaisControllerTest {
 
     CadastrarPaisRequest cadastrarPaisRequest;
 
+    @BeforeEach
+    public void init() {
+        cadastrarPaisRequest = new CadastrarPaisRequest("Brasil");
+    }
+
     @Test
     public void TestandoCadastrarPaisComNomeNulo() throws Exception {
         mockMvc.perform(post("/pais/registrar")
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void TestandoCadastrarPaisComDadosCorretos() throws Exception {
+        mockMvc.perform(post("/pais/registrar")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(cadastrarPaisRequest)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
