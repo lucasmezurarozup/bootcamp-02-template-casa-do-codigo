@@ -29,6 +29,18 @@ public class CadastrarAutorRequest {
 
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
     public Autor toObject() {
         return new Autor(this.nome, this.email, this.descricao);
     }

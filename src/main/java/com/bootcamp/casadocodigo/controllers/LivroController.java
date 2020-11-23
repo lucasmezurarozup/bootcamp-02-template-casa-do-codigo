@@ -1,7 +1,6 @@
 package com.bootcamp.casadocodigo.controllers;
 
-import com.bootcamp.casadocodigo.dtos.CadastrarLivroRequest;
-import com.bootcamp.casadocodigo.dtos.ListarLivrosResponse;
+import com.bootcamp.casadocodigo.dtos.*;
 import com.bootcamp.casadocodigo.entities.Livro;
 import com.bootcamp.casadocodigo.exceptions.LivroNotFoundException;
 import com.bootcamp.casadocodigo.repositories.LivroRepository;
@@ -48,6 +47,14 @@ public class LivroController {
     @GetMapping("/detalhes/{id}")
     public ResponseEntity<?> detalhesLivro(@PathVariable("id") Long id) {
         Livro livro = livroRepository.findById(id).orElseThrow(() -> new LivroNotFoundException("O livro com o id: "+id+" não existe em nossa base de dados"));
-        return ResponseEntity.ok(livro);
+        LivroDetalhesResponse livroDetalhesResponse = new LivroDetalhesResponse(livro.getTitulo(),
+                livro.getResumo(),
+                livro.getSumario(),
+                livro.getPreco(),
+                livro.getNumeroPaginas(),
+                livro.getIsbn(),
+                new CategoriaDetalhesResponse(livro.getCategoria().getNome()),
+                new AutorDetalhesResponse(livro.getAutor().getNome(), livro.getAutor().getDescricao()));
+        return ResponseEntity.ok(livroDetalhesResponse);
     }
 }

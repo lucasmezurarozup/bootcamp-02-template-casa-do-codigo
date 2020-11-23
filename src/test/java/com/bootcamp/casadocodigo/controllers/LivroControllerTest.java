@@ -3,10 +3,13 @@ package com.bootcamp.casadocodigo.controllers;
 import com.bootcamp.casadocodigo.dtos.CadastrarAutorRequest;
 import com.bootcamp.casadocodigo.dtos.CadastrarCategoriaRequest;
 import com.bootcamp.casadocodigo.dtos.CadastrarLivroRequest;
+import com.bootcamp.casadocodigo.dtos.LivroDetalhesResponse;
 import com.bootcamp.casadocodigo.entities.Autor;
 import com.bootcamp.casadocodigo.entities.Categoria;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -303,7 +307,7 @@ public class LivroControllerTest {
     @Test
     public void testandoInsercaoComDadosCorretos() throws Exception {
 
-        cadastrarAutorRequest = new CadastrarAutorRequest("lucas2", "lucas.mezuraro2@zup.com.br", "Teste");
+        cadastrarAutorRequest = new CadastrarAutorRequest("lucas2", "lucas.mezuraroa@zup.com.br", "Teste");
         mockMvc.perform(post("/autor/registrar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cadastrarAutorRequest)))
@@ -354,12 +358,71 @@ public class LivroControllerTest {
     @Test
     public void testandoRotaDetalhesDoLivroEmLivroExistente() throws Exception {
 
+        cadastrarAutorRequest = new CadastrarAutorRequest("lucas2", "lucas.mezuraro2@zup.com.br", "Teste");
+
         this.testandoInsercaoComDadosCorretos();
 
         mockMvc.perform(get("/livro/detalhes/{id}", 3)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    public void testandoRetornoDetalhesLivro() throws Exception {
+        cadastrarAutorRequest = new CadastrarAutorRequest("luiz", "luiz.mezuraroa@zup.com.br", "Teste");
+        mockMvc.perform(post("/autor/registrar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cadastrarAutorRequest)))
+                .andDo(print()).andExpect(status().is2xxSuccessful());
+
+        cadastrarCategoriaRequest.
+                setNome("Spring2");
+        mockMvc.perform(
+                post("/categoria/registrar")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cadastrarCategoriaRequest)))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+
+        Thread.sleep(2000);
+
+        CadastrarLivroRequest cadastrarLivroRequest2 = new CadastrarLivroRequest("Java3",
+                "E um livro sobre web, java, e outras coisas",
+                "1 - Web, 2 - Http",
+                BigDecimal.valueOf(29.90),
+                156,
+                "1000-0000-0000",
+                LocalDate.of(2025, 10, 10),
+                2l,
+                1l);
+        mockMvc.perform(post("/livro/registrar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cadastrarLivroRequest2)))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+
+
+
+       MvcResult mvcResult = mockMvc.perform(get("/livro/detalhes/{id}", 3)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+
+        String response = mvcResult.getResponse().getContentAsString();
+        LivroDetalhesResponse livroDetalhesResponse = objectMapper.readValue(response, LivroDetalhesResponse.class);
+
+        Assertions.assertThat(cadastrarLivroRequest2.getTitulo()).isEqualTo(livroDetalhesResponse.getTitulo());
+        Assertions.assertThat(cadastrarLivroRequest2.getResumo()).isEqualTo(livroDetalhesResponse.getResumo());
+        Assertions.assertThat(cadastrarLivroRequest2.getSumario()).isEqualTo(livroDetalhesResponse.getSumario());
+        Assertions.assertThat(cadastrarLivroRequest2.getPreco()).isCloseTo(livroDetalhesResponse.getPreco(), Percentage.withPercentage(99.90));
+        Assertions.assertThat(cadastrarLivroRequest2.getNumeroPaginas()).isEqualTo(livroDetalhesResponse.getNumeroPaginas());
+        Assertions.assertThat(cadastrarLivroRequest2.getIsbn()).isEqualTo(livroDetalhesResponse.getIsbn());
+        Assertions.assertThat(cadastrarCategoriaRequest.getNome())
+                .isEqualTo(livroDetalhesResponse.getCategoriaDetalhesResponse().getNome());
+        Assertions.assertThat(cadastrarAutorRequest.getNome()).isEqualTo(livroDetalhesResponse.getAutorDetalhesResponse().getNome());
+        Assertions.assertThat(cadastrarAutorRequest.getDescricao()).isEqualTo(livroDetalhesResponse.getAutorDetalhesResponse().getDescricao());
     }
 
 
