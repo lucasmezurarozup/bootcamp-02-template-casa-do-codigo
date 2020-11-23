@@ -3,6 +3,7 @@ package com.bootcamp.casadocodigo.controllers;
 import com.bootcamp.casadocodigo.dtos.CadastrarLivroRequest;
 import com.bootcamp.casadocodigo.dtos.ListarLivrosResponse;
 import com.bootcamp.casadocodigo.entities.Livro;
+import com.bootcamp.casadocodigo.exceptions.LivroNotFoundException;
 import com.bootcamp.casadocodigo.repositories.LivroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,5 +43,11 @@ public class LivroController {
                 .map(livro -> new ListarLivrosResponse(livro.getId(),livro.getTitulo()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(livros);
+    }
+
+    @GetMapping("/detalhes/{id}")
+    public ResponseEntity<?> detalhesLivro(@PathVariable("id") Long id) {
+        Livro livro = livroRepository.findById(id).orElseThrow(() -> new LivroNotFoundException("O livro com o id: "+id+" não existe em nossa base de dados"));
+        return ResponseEntity.ok(livro);
     }
 }

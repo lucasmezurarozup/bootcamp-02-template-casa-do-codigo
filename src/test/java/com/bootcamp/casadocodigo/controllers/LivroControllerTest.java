@@ -332,6 +332,7 @@ public class LivroControllerTest {
         mockMvc.perform(post("/livro/registrar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cadastrarLivroRequest2)))
+                .andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }
 
@@ -339,6 +340,25 @@ public class LivroControllerTest {
     public void testandoExistenciaRotaListarLivros() throws Exception {
         mockMvc.perform(get("/livro/listar")
                 .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    public void testandoRotaDetalhesDoLivroEmLivroNaoExistente() throws Exception {
+        mockMvc.perform(get("/livro/detalhes/{id}", 100000)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testandoRotaDetalhesDoLivroEmLivroExistente() throws Exception {
+
+        this.testandoInsercaoComDadosCorretos();
+
+        mockMvc.perform(get("/livro/detalhes/{id}", 3)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }
 

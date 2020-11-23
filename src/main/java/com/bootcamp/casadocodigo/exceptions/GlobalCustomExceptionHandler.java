@@ -50,4 +50,16 @@ public class GlobalCustomExceptionHandler extends ResponseEntityExceptionHandler
         body.put("errors", errors);
         return ResponseEntity.badRequest().body(body);
     }
+
+    @ExceptionHandler(LivroNotFoundException.class)
+    public ResponseEntity<?> livroNotExists(LivroNotFoundException livroNotFoundException, HttpServletRequest request) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        body.put("status", 404);
+        body.put("path", request.getRequestURI().toString());
+        List<Erro> errors = new ArrayList<>();
+        errors.add(new Erro("id", livroNotFoundException.getMessage()));
+        body.put("errors", errors);
+        return ResponseEntity.status(404).body(body);
+    }
 }

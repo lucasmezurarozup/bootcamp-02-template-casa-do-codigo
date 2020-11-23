@@ -62,6 +62,11 @@ public class Livro {
         this.autor = autor;
     }
 
+    @Deprecated
+    private Livro() {
+
+    }
+
     public Long getId() {
         return id;
     }
