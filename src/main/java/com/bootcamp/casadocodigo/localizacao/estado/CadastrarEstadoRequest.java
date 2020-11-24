@@ -1,11 +1,13 @@
 package com.bootcamp.casadocodigo.localizacao.estado;
 
+import com.bootcamp.casadocodigo.compartilhado.PaisNotFoundException;
 import com.bootcamp.casadocodigo.localizacao.pais.Pais;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 public class CadastrarEstadoRequest {
 
@@ -23,11 +25,11 @@ public class CadastrarEstadoRequest {
 
     public Estado toObject(EntityManager entityManager) {
 
-        Pais pais = entityManager.find(Pais.class, idPais);
+        Optional<Pais> pais = Optional.ofNullable(entityManager.find(Pais.class, idPais));
 
-        Assert.notNull(pais, "O pais associado ao estado deve estar previamente registrado.");
-
-        return new Estado(nome, pais);
+        return new Estado(nome, pais
+                .orElseThrow(() ->
+                        new PaisNotFoundException("O pais com o id "+idPais+" não está registrado em nosso banco de dados.")));
     }
 
     public String getNome() {

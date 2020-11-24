@@ -62,14 +62,38 @@ public class GlobalCustomExceptionHandler extends ResponseEntityExceptionHandler
         return ResponseEntity.status(404).body(body);
     }
 
-    @ExceptionHandler(PaisNaoRegistradoException.class)
-    public ResponseEntity<?> livroNotExists(PaisNaoRegistradoException paisNaoRegistradoException, HttpServletRequest request) {
+    @ExceptionHandler(PaisNotFoundException.class)
+    public ResponseEntity<?> livroNotExists(PaisNotFoundException paisNotFoundException, HttpServletRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
         body.put("status", 400);
         body.put("path", request.getRequestURI().toString());
         List<Erro> errors = new ArrayList<>();
-        errors.add(new Erro("id", paisNaoRegistradoException.getMessage()));
+        errors.add(new Erro("id", paisNotFoundException.getMessage()));
+        body.put("errors", errors);
+        return ResponseEntity.status(400).body(body);
+    }
+
+    @ExceptionHandler(CategoriaNotFoundException.class)
+    public ResponseEntity<?> categoriaNotExists(CategoriaNotFoundException categoriaNotFoundException, HttpServletRequest request) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        body.put("status", 400);
+        body.put("path", request.getRequestURI().toString());
+        List<Erro> errors = new ArrayList<>();
+        errors.add(new Erro("id", categoriaNotFoundException.getMessage()));
+        body.put("errors", errors);
+        return ResponseEntity.status(400).body(body);
+    }
+
+    @ExceptionHandler(AutorNotFoundException.class)
+    public ResponseEntity<?> categoriaNotExists(AutorNotFoundException autorNotFoundException, HttpServletRequest request) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        body.put("status", 400);
+        body.put("path", request.getRequestURI().toString());
+        List<Erro> errors = new ArrayList<>();
+        errors.add(new Erro("id", autorNotFoundException.getMessage()));
         body.put("errors", errors);
         return ResponseEntity.status(400).body(body);
     }

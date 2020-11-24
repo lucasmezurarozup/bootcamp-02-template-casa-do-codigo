@@ -1,6 +1,6 @@
 package com.bootcamp.casadocodigo.localizacao.estado;
 
-import com.bootcamp.casadocodigo.compartilhado.PaisNaoRegistradoException;
+import com.bootcamp.casadocodigo.compartilhado.PaisNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +26,7 @@ public class EstadoController {
     private EntityManager entityManager;
 
     @PostMapping("/pais/{id}")
-    @Transactional(rollbackOn = PaisNaoRegistradoException.class)
+    @Transactional(rollbackOn = PaisNotFoundException.class)
     public ResponseEntity<?> registrarEstadoAoPais(@RequestBody @Valid CadastrarEstadoRequest cadastrarEstadoRequest) {
         Estado estado = cadastrarEstadoRequest.toObject(entityManager);
         estadoRepository

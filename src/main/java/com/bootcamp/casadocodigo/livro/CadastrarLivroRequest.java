@@ -2,6 +2,8 @@ package com.bootcamp.casadocodigo.livro;
 
 import com.bootcamp.casadocodigo.autor.Autor;
 import com.bootcamp.casadocodigo.categoria.Categoria;
+import com.bootcamp.casadocodigo.compartilhado.AutorNotFoundException;
+import com.bootcamp.casadocodigo.compartilhado.CategoriaNotFoundException;
 import com.bootcamp.casadocodigo.livro.Livro;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.util.Assert;
@@ -10,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class CadastrarLivroRequest {
 
@@ -107,12 +110,22 @@ public class CadastrarLivroRequest {
 
     public Livro toObject(EntityManager entityManager) {
 
-        Categoria categoria = entityManager.find(Categoria.class, this.idCategoria);
-        Autor autor = entityManager.find(Autor.class, this.idAutor);
+        Optional<Categoria> categoria = Optional.ofNullable(entityManager.find(Categoria.class, this.idCategoria));
+        Optional<Autor> autor = Optional.ofNullable(entityManager.find(Autor.class, this.idAutor));
 
-        Assert.notNull(categoria, "a categoria deve estar previamente cadastrada.");
-        Assert.notNull(autor, "o/a autor/(a) deve estar previamente cadastrado/(a).");
-
-        return new Livro(this.titulo, this.resumo, this.sumario, this.preco, this.numeroPaginas, this.isbn, this.dataPublicacao, categoria, autor);
+        return new Livro(this.titulo,
+                this.resumo,
+                this.sumario,
+                this.preco,
+                this.numeroPaginas,
+                this.isbn,
+                this.dataPublicacao,
+                categoria.
+                        orElseThrow(() ->
+                                new CategoriaNotFoundException(
+                                        "A categoria com o id "+idCategoria+" não está cadastrada em nosso banco de dados")),
+                autor.
+                        orElseThrow(() ->
+                                new AutorNotFoundException("A categoria com o id "+idAutor+" não está cadastrada em nosso banco de dados")));
     }
 }
