@@ -22,8 +22,8 @@ public class PaisController {
     PaisRepository paisRepository;
 
     @PostMapping("/registrar")
-    public ResponseEntity<?> registrarPais(@RequestBody @Valid CadastrarPaisRequest cadastrarPaisRequest) {
+    public ResponseEntity<?> registrarPais (@RequestBody @Valid CadastrarPaisRequest cadastrarPaisRequest) {
         Pais pais = paisRepository.save(cadastrarPaisRequest.toObject());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(pais);
     }
 }

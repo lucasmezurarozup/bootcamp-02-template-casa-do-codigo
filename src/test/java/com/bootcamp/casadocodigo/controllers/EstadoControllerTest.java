@@ -2,7 +2,6 @@ package com.bootcamp.casadocodigo.controllers;
 
 import com.bootcamp.casadocodigo.dtos.CadastrarEstadoRequest;
 import com.bootcamp.casadocodigo.dtos.CadastrarPaisRequest;
-import com.bootcamp.casadocodigo.entities.Pais;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,6 +54,28 @@ public class EstadoControllerTest {
                 .content(objectMapper.writeValueAsString(cadastrarEstadoRequest)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void TestandoCadastrarEstadoComPaisCorretamente() throws Exception {
+
+        CadastrarPaisRequest cadastrarPaisRequest = new CadastrarPaisRequest("EUA");
+
+        mockMvc.perform(post("/pais/registrar")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(cadastrarPaisRequest)))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+
+
+        cadastrarEstadoRequest = new CadastrarEstadoRequest("São Paulo", 2l);
+
+
+        mockMvc.perform(post("/estado/pais/{id}", 2)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(cadastrarEstadoRequest)))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
     }
 
 }

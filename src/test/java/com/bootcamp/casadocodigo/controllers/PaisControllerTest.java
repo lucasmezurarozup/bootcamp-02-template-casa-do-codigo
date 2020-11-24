@@ -47,7 +47,7 @@ public class PaisControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(cadastrarPaisRequest)))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().is2xxSuccessful());
     }
 
 }

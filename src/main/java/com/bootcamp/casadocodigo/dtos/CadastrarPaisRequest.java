@@ -2,23 +2,29 @@ package com.bootcamp.casadocodigo.dtos;
 
 import com.bootcamp.casadocodigo.entities.Pais;
 
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 
 public class CadastrarPaisRequest {
 
-    @NotBlank(message = "Nome é um campo de preenchimento obrigatório.")
-    private String nome;
+    @NotBlank(message = "Pais é um campo de preenchimento obrigatório.")
+    String pais;
 
-    public CadastrarPaisRequest(String nome) {
-        this.nome = nome;
+    public CadastrarPaisRequest() {
+
     }
 
-    public String getNome() {
-        return nome;
+    public CadastrarPaisRequest(String pais) {
+        this.pais = pais;
+    }
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
     }
 
     public Pais toObject() {
-        return new Pais(this.nome);
+        return new Pais(pais);
     }
 }
