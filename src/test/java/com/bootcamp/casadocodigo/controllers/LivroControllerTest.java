@@ -1,12 +1,9 @@
 package com.bootcamp.casadocodigo.controllers;
 
-import com.bootcamp.casadocodigo.dtos.CadastrarAutorRequest;
-import com.bootcamp.casadocodigo.dtos.CadastrarCategoriaRequest;
-import com.bootcamp.casadocodigo.dtos.CadastrarLivroRequest;
-import com.bootcamp.casadocodigo.dtos.LivroDetalhesResponse;
-import com.bootcamp.casadocodigo.entities.Autor;
-import com.bootcamp.casadocodigo.entities.Categoria;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.bootcamp.casadocodigo.autor.CadastrarAutorRequest;
+import com.bootcamp.casadocodigo.categoria.CadastrarCategoriaRequest;
+import com.bootcamp.casadocodigo.livro.CadastrarLivroRequest;
+import com.bootcamp.casadocodigo.livro.LivroDetalhesResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.data.Percentage;
@@ -17,13 +14,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAccessor;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

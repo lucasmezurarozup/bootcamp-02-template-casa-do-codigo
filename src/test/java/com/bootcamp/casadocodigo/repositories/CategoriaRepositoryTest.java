@@ -1,6 +1,7 @@
 package com.bootcamp.casadocodigo.repositories;
 
-import com.bootcamp.casadocodigo.entities.Categoria;
+import com.bootcamp.casadocodigo.categoria.Categoria;
+import com.bootcamp.casadocodigo.categoria.CategoriaRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,10 +1,12 @@
 package com.bootcamp.casadocodigo.repositories;
 
-import com.bootcamp.casadocodigo.entities.Autor;
-import com.bootcamp.casadocodigo.entities.Categoria;
-import com.bootcamp.casadocodigo.entities.Livro;
+import com.bootcamp.casadocodigo.autor.Autor;
+import com.bootcamp.casadocodigo.autor.AutorRepository;
+import com.bootcamp.casadocodigo.categoria.Categoria;
+import com.bootcamp.casadocodigo.categoria.CategoriaRepository;
+import com.bootcamp.casadocodigo.livro.Livro;
+import com.bootcamp.casadocodigo.livro.LivroRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

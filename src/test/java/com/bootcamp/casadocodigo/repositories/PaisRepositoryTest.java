@@ -1,6 +1,7 @@
 package com.bootcamp.casadocodigo.repositories;
 
-import com.bootcamp.casadocodigo.entities.Pais;
+import com.bootcamp.casadocodigo.localizacao.pais.Pais;
+import com.bootcamp.casadocodigo.localizacao.pais.PaisRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

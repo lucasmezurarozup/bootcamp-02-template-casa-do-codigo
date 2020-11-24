@@ -1,7 +1,7 @@
 package com.bootcamp.casadocodigo.controllers;
 
-import com.bootcamp.casadocodigo.dtos.CadastrarAutorRequest;
-import com.bootcamp.casadocodigo.entities.Autor;
+import com.bootcamp.casadocodigo.autor.CadastrarAutorRequest;
+import com.bootcamp.casadocodigo.autor.Autor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

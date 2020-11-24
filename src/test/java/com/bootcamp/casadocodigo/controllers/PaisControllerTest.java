@@ -1,6 +1,6 @@
 package com.bootcamp.casadocodigo.controllers;
 
-import com.bootcamp.casadocodigo.dtos.CadastrarPaisRequest;
+import com.bootcamp.casadocodigo.localizacao.pais.CadastrarPaisRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

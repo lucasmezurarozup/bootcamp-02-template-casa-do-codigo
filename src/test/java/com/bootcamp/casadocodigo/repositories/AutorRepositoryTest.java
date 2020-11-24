@@ -1,14 +1,12 @@
 package com.bootcamp.casadocodigo.repositories;
 
-import com.bootcamp.casadocodigo.entities.Autor;
+import com.bootcamp.casadocodigo.autor.Autor;
+import com.bootcamp.casadocodigo.autor.AutorRepository;
 import org.assertj.core.api.Assertions;
-import org.hibernate.JDBCException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 
 import javax.validation.ConstraintViolationException;
 
