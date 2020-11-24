@@ -2,12 +2,13 @@ package com.bootcamp.casadocodigo.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 @Table(
         name = "paises",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "nome", name = "nome_do_pais")
+                @UniqueConstraint(columnNames = "nomePais", name = "nome_do_pais")
         }
 )
 public class Pais {
@@ -17,7 +18,11 @@ public class Pais {
     private Long id;
 
     @NotBlank(message = "Nome é um campo preenchimento obrigatório.")
-    private String nome;
+    private String nomePais;
+
+    @OneToMany(mappedBy = "pais",cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    private List<Estado> estados;
 
     @Deprecated
     private Pais() {
@@ -29,10 +34,10 @@ public class Pais {
     }
 
     public String getNome() {
-        return nome;
+        return nomePais;
     }
 
-    public Pais(@NotBlank(message = "Nome é um campo preenchimento obrigatório.") String nome) {
-        this.nome = nome;
+    public Pais(String nome) {
+        this.nomePais = nome;
     }
 }

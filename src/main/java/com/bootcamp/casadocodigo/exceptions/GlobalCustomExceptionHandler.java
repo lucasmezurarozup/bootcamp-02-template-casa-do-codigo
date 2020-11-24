@@ -62,4 +62,16 @@ public class GlobalCustomExceptionHandler extends ResponseEntityExceptionHandler
         body.put("errors", errors);
         return ResponseEntity.status(404).body(body);
     }
+
+    @ExceptionHandler(PaisNaoRegistradoException.class)
+    public ResponseEntity<?> livroNotExists(PaisNaoRegistradoException paisNaoRegistradoException, HttpServletRequest request) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        body.put("status", 400);
+        body.put("path", request.getRequestURI().toString());
+        List<Erro> errors = new ArrayList<>();
+        errors.add(new Erro("id", paisNaoRegistradoException.getMessage()));
+        body.put("errors", errors);
+        return ResponseEntity.status(400).body(body);
+    }
 }

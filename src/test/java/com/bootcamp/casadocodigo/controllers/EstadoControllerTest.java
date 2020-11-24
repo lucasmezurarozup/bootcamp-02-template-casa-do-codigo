@@ -68,7 +68,7 @@ public class EstadoControllerTest {
                 .andExpect(status().is2xxSuccessful());
 
 
-        cadastrarEstadoRequest = new CadastrarEstadoRequest("São Paulo", 2l);
+        cadastrarEstadoRequest = new CadastrarEstadoRequest("New York", 2l);
 
 
         mockMvc.perform(post("/estado/pais/{id}", 2)
