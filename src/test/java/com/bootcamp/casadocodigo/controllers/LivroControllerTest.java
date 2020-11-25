@@ -55,8 +55,8 @@ public class LivroControllerTest {
                 2l);
 
         cadastrarAutorRequest = new CadastrarAutorRequest("lucas", "lucas.mezuraro@zup.com.br", "desc");
-        cadastrarCategoriaRequest = new CadastrarCategoriaRequest();
-        cadastrarCategoriaRequest.setNome("Java");
+        cadastrarCategoriaRequest = new CadastrarCategoriaRequest("Web");
+
     }
 
     public CadastrarLivroRequest testCadastrar(

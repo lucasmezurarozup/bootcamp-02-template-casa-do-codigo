@@ -7,10 +7,14 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
-@JsonAutoDetect
 public class NovaCompraRequest {
 
     @NotBlank(message = "nome do usuário é um campo de preenchimento obrigatório.")
@@ -37,8 +41,20 @@ public class NovaCompraRequest {
     private String telefone;
     private String cep;
 
+    @Valid
+    @NotNull(message = "é necessário possuir um pedido vinculado a compra.")
+    private NovoPedidoRequest pedido;
+
     public NovaCompraRequest() {
 
+    }
+
+    public void setPedido(@NotNull NovoPedidoRequest pedido) {
+        this.pedido = pedido;
+    }
+
+    public NovoPedidoRequest getPedido() {
+        return pedido;
     }
 
     public NovaCompraRequest(
@@ -52,7 +68,8 @@ public class NovaCompraRequest {
             @NotNull(message = "país é um campo de preenchimento obrigatório.") Long idPais,
             @NotNull(message = "estado é um campo de preenchimento obrigatório.") Long idEstado,
             @NotBlank(message = "telefone é um campo de preenchimento obrigatório.") String telefone,
-            String cep) {
+            String cep,
+            NovoPedidoRequest pedido) {
 
         this.nome = nome;
         this.sobrenome = sobrenome;
@@ -65,6 +82,7 @@ public class NovaCompraRequest {
         this.idEstado = idEstado;
         this.telefone = telefone;
         this.cep = cep;
+        this.pedido = pedido;
     }
 
     public boolean validaDocumento() {

@@ -30,8 +30,7 @@ public class CategoriaControllerTest {
 
     @BeforeEach
     public void init() {
-        cadastrarCategoriaRequest = new CadastrarCategoriaRequest();
-        cadastrarCategoriaRequest.setNome("Web");
+        cadastrarCategoriaRequest = new CadastrarCategoriaRequest("Web");
     }
 
     @Test

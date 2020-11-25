@@ -1,19 +1,29 @@
 package com.bootcamp.casadocodigo.controllers;
 
+import com.bootcamp.casadocodigo.autor.CadastrarAutorRequest;
+import com.bootcamp.casadocodigo.categoria.CadastrarCategoriaRequest;
+import com.bootcamp.casadocodigo.livro.CadastrarLivroRequest;
 import com.bootcamp.casadocodigo.localizacao.estado.CadastrarEstadoRequest;
 import com.bootcamp.casadocodigo.localizacao.pais.CadastrarPaisRequest;
+import com.bootcamp.casadocodigo.pagamento.NovaCompraItemRequest;
 import com.bootcamp.casadocodigo.pagamento.NovaCompraRequest;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.bootcamp.casadocodigo.pagamento.NovoPedidoRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,9 +40,11 @@ public class CompraControllerTest {
 
 
     private NovaCompraRequest novaCompraRequest;
+    private NovoPedidoRequest novoPedidoRequest;
 
     @BeforeEach
     public void init() {
+        novoPedidoRequest = new NovoPedidoRequest();
         novaCompraRequest = new NovaCompraRequest(
                 "lucas",
                 "mezuraro",
@@ -44,7 +56,8 @@ public class CompraControllerTest {
                 1l,
                 2l,
                 "99999999",
-                "00000000"
+                "00000000",
+                novoPedidoRequest
         );
     }
 
@@ -74,7 +87,8 @@ public class CompraControllerTest {
                 1l,
                 2l,
                 "99999999",
-                "00000000");
+                "00000000",
+                novoPedidoRequest);
         mockMvc.perform(post("/compra/nova")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(novaCompraRequest)))
@@ -95,7 +109,8 @@ public class CompraControllerTest {
                 1l,
                 2l,
                 "99999999",
-                "00000000");
+                "00000000",
+                novoPedidoRequest);
         mockMvc.perform(post("/compra/nova")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(novaCompraRequest)))
@@ -105,6 +120,7 @@ public class CompraControllerTest {
 
     @Test
     public void testandoRotaCompraComEmailNulo() throws Exception {
+        novoPedidoRequest = new NovoPedidoRequest();
         novaCompraRequest = new NovaCompraRequest(
                 "lucas",
                 "mezuraro",
@@ -116,7 +132,8 @@ public class CompraControllerTest {
                 1l,
                 2l,
                 "99999999",
-                "00000000");
+                "00000000",
+                novoPedidoRequest);
         mockMvc.perform(post("/compra/nova")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(novaCompraRequest)))
@@ -137,7 +154,8 @@ public class CompraControllerTest {
                 1l,
                 2l,
                 "99999999",
-                "00000000");
+                "00000000",
+                novoPedidoRequest);
         mockMvc.perform(post("/compra/nova")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(novaCompraRequest)))
@@ -158,7 +176,8 @@ public class CompraControllerTest {
                 1l,
                 2l,
                 "99999999",
-                "00000000");
+                "00000000",
+                novoPedidoRequest);
         mockMvc.perform(post("/compra/nova")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(novaCompraRequest)))
@@ -179,7 +198,8 @@ public class CompraControllerTest {
                 1l,
                 2l,
                 "99999999",
-                "00000000");
+                "00000000",
+                novoPedidoRequest);
         mockMvc.perform(post("/compra/nova")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(novaCompraRequest)))
@@ -200,7 +220,8 @@ public class CompraControllerTest {
                 null,
                 2l,
                 "99999999",
-                "00000000");
+                "00000000",
+                novoPedidoRequest);
         mockMvc.perform(post("/compra/nova")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(novaCompraRequest)))
@@ -221,7 +242,8 @@ public class CompraControllerTest {
                 1l,
                 2l,
                 null,
-                "00000000");
+                "00000000",
+                novoPedidoRequest);
         mockMvc.perform(post("/compra/nova")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(novaCompraRequest)))
@@ -242,7 +264,8 @@ public class CompraControllerTest {
                 1l,
                 null,
                 "99999999",
-                "00000000");
+                "00000000",
+                novoPedidoRequest);
         mockMvc.perform(post("/compra/nova")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(novaCompraRequest)))
@@ -263,7 +286,8 @@ public class CompraControllerTest {
                 1l,
                 2l,
                 "99999999",
-                "00000000");
+                "00000000",
+                novoPedidoRequest);
         mockMvc.perform(post("/compra/nova")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(novaCompraRequest)))
@@ -284,7 +308,8 @@ public class CompraControllerTest {
                 1l,
                 2l,
                 "99999999",
-                "00000000");
+                "00000000",
+                novoPedidoRequest);
         mockMvc.perform(post("/compra/nova")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(novaCompraRequest)))
@@ -295,6 +320,42 @@ public class CompraControllerTest {
     @Test
     public void testandoRotaCompraComDadosCorretos() throws Exception {
 
+        CadastrarAutorRequest cadastrarAutorRequest = new CadastrarAutorRequest("luiz", "luiz.mezuraroa@zup.com.br", "Teste");
+        mockMvc.perform(post("/autor/registrar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cadastrarAutorRequest)))
+                .andDo(print()).andExpect(status().is2xxSuccessful());
+
+        CadastrarCategoriaRequest cadastrarCategoriaRequest = new CadastrarCategoriaRequest("Java3");
+        mockMvc.perform(
+                post("/categoria/registrar")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cadastrarCategoriaRequest)))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+
+        CadastrarLivroRequest cadastrarLivroRequest2 = new CadastrarLivroRequest("Java3",
+                "E um livro sobre web, java, e outras coisas",
+                "1 - Web, 2 - Http",
+                BigDecimal.valueOf(29.90),
+                156,
+                "1000-0000-0000",
+                LocalDate.of(2025, 10, 10),
+                2l,
+                1l);
+        mockMvc.perform(post("/livro/registrar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(cadastrarLivroRequest2)))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+
+
+
+         mockMvc.perform(get("/livro/detalhes/{id}", 3)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+
         CadastrarPaisRequest cadastrarPaisRequest = new CadastrarPaisRequest("EUA");
 
         mockMvc.perform(post("/pais/registrar")
@@ -304,15 +365,21 @@ public class CompraControllerTest {
                 .andExpect(status().is2xxSuccessful());
 
 
-        CadastrarEstadoRequest cadastrarEstadoRequest = new CadastrarEstadoRequest("New York", 1l);
+        CadastrarEstadoRequest cadastrarEstadoRequest = new CadastrarEstadoRequest("New York", 4l);
 
 
-        mockMvc.perform(post("/estado/pais/{id}", 1)
+        mockMvc.perform(post("/estado/pais/{id}", 4l)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(cadastrarEstadoRequest)))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
+
+
+
+        List<NovaCompraItemRequest> listItens = new ArrayList<>();
+        listItens.add(new NovaCompraItemRequest(3l, 1));
+        novoPedidoRequest = new NovoPedidoRequest(BigDecimal.valueOf(10l), listItens);
 
         novaCompraRequest = new NovaCompraRequest(
                 "lucas",
@@ -322,14 +389,15 @@ public class CompraControllerTest {
                 "São Paulo",
                 "Nda",
                 "Guarulhos",
-                1l,
-                1l,
+                4l,
+                5l,
                 "99999999",
-                "00000000");
+                "00000000",
+                novoPedidoRequest);
         mockMvc.perform(post("/compra/nova")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(novaCompraRequest)))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().is2xxSuccessful());
     }
 }

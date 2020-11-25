@@ -31,6 +31,6 @@ public class EstadoController {
         Estado estado = cadastrarEstadoRequest.toObject(entityManager);
         estadoRepository
                 .save(estado);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(estado);
     }
 }
