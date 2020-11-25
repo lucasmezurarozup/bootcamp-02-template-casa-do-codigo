@@ -28,6 +28,6 @@ public class CompraControllerTest {
         mockMvc.perform(post("/compra/nova")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 }
