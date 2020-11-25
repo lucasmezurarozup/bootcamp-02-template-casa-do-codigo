@@ -247,4 +247,25 @@ public class CompraControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void testandoRotaCompraComDocumentoInvalido() throws Exception {
+        novaCompraRequest = new NovaCompraRequest(
+                "lucas",
+                "mezuraro",
+                "lucas.mezuraro@zup.com.br",
+                "000000000",
+                "São Paulo",
+                "Nda",
+                "Guarulhos",
+                1l,
+                2l,
+                "99999999",
+                "00000000");
+        mockMvc.perform(post("/compra/nova")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(novaCompraRequest)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
 }
