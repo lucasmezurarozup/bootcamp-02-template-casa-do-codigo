@@ -1,16 +1,14 @@
 package com.bootcamp.casadocodigo.pagamento;
 
+import com.bootcamp.casadocodigo.compartilhado.Existe;
 import com.bootcamp.casadocodigo.localizacao.estado.Estado;
 import com.bootcamp.casadocodigo.localizacao.pais.Pais;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import org.hibernate.validator.constraints.br.CNPJ;
-import org.hibernate.validator.constraints.br.CPF;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Optional;
 
 @JsonAutoDetect
 public class NovaCompraRequest {
@@ -30,8 +28,10 @@ public class NovaCompraRequest {
     @NotBlank(message = "cidade é um campo de preenchimento obrigatório.")
     private String cidade;
     @NotNull(message = "país é um campo de preenchimento obrigatório.")
+    @Existe(nomeCampo = "id", entidade = Pais.class, message = "país não registrado em nossa base de dados.")
     private Long idPais;
     @NotNull(message = "estado é um campo de preenchimento obrigatório.")
+    @Existe(nomeCampo = "id", entidade = Estado.class, message = "estado não registrado em nossa base de dados.")
     private Long idEstado;
     @NotBlank(message = "telefone é um campo de preenchimento obrigatório.")
     private String telefone;
@@ -53,8 +53,6 @@ public class NovaCompraRequest {
             @NotNull(message = "estado é um campo de preenchimento obrigatório.") Long idEstado,
             @NotBlank(message = "telefone é um campo de preenchimento obrigatório.") String telefone,
             String cep) {
-
-
 
         this.nome = nome;
         this.sobrenome = sobrenome;
