@@ -1,8 +1,11 @@
 package com.bootcamp.casadocodigo.pagamento;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+@JsonAutoDetect
 public class NovaCompraRequest {
 
     @NotBlank(message = "nome do usuário é um campo de preenchimento obrigatório.")
@@ -27,7 +30,7 @@ public class NovaCompraRequest {
     private String telefone;
     private String cep;
 
-    private NovaCompraRequest() {
+    public NovaCompraRequest() {
 
     }
 
