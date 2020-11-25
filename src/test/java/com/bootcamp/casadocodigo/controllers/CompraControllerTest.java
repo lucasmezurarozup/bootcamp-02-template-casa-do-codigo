@@ -1,5 +1,7 @@
 package com.bootcamp.casadocodigo.controllers;
 
+import com.bootcamp.casadocodigo.localizacao.estado.CadastrarEstadoRequest;
+import com.bootcamp.casadocodigo.localizacao.pais.CadastrarPaisRequest;
 import com.bootcamp.casadocodigo.pagamento.NovaCompraRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -260,6 +262,68 @@ public class CompraControllerTest {
                 "Guarulhos",
                 1l,
                 2l,
+                "99999999",
+                "00000000");
+        mockMvc.perform(post("/compra/nova")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(novaCompraRequest)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testandoRotaCompraComPaisEEstadoNaoExistente() throws Exception {
+        novaCompraRequest = new NovaCompraRequest(
+                "lucas",
+                "mezuraro",
+                "lucas.mezuraro@zup.com.br",
+                "516.170.390-39",
+                "São Paulo",
+                "Nda",
+                "Guarulhos",
+                1l,
+                2l,
+                "99999999",
+                "00000000");
+        mockMvc.perform(post("/compra/nova")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(novaCompraRequest)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testandoRotaCompraComDadosCorretos() throws Exception {
+
+        CadastrarPaisRequest cadastrarPaisRequest = new CadastrarPaisRequest("EUA");
+
+        mockMvc.perform(post("/pais/registrar")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(cadastrarPaisRequest)))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+
+
+        CadastrarEstadoRequest cadastrarEstadoRequest = new CadastrarEstadoRequest("New York", 1l);
+
+
+        mockMvc.perform(post("/estado/pais/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(cadastrarEstadoRequest)))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+
+
+        novaCompraRequest = new NovaCompraRequest(
+                "lucas",
+                "mezuraro",
+                "lucas.mezuraro@zup.com.br",
+                "516.170.390-39",
+                "São Paulo",
+                "Nda",
+                "Guarulhos",
+                1l,
+                1l,
                 "99999999",
                 "00000000");
         mockMvc.perform(post("/compra/nova")
