@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -29,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CompraControllerTest {
 
     @Autowired
@@ -306,90 +308,6 @@ public class CompraControllerTest {
                 "Guarulhos",
                 1l,
                 2l,
-                "99999999",
-                "00000000",
-                novoPedidoRequest);
-        mockMvc.perform(post("/compra/nova")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(novaCompraRequest)))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void testandoRotaCompraComPrecoPassadoIncorreto() throws Exception {
-
-        CadastrarAutorRequest cadastrarAutorRequest = new CadastrarAutorRequest("luiz", "luiz.mezuraroa@zup.com.br", "Teste");
-        mockMvc.perform(post("/autor/registrar")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(cadastrarAutorRequest)))
-                .andDo(print()).andExpect(status().is2xxSuccessful());
-
-        CadastrarCategoriaRequest cadastrarCategoriaRequest = new CadastrarCategoriaRequest("Java3");
-        mockMvc.perform(
-                post("/categoria/registrar")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(cadastrarCategoriaRequest)))
-                .andDo(print())
-                .andExpect(status().is2xxSuccessful());
-
-        CadastrarLivroRequest cadastrarLivroRequest2 = new CadastrarLivroRequest("Java3",
-                "E um livro sobre web, java, e outras coisas",
-                "1 - Web, 2 - Http",
-                BigDecimal.valueOf(29.90),
-                156,
-                "1000-0000-0000",
-                LocalDate.of(2025, 10, 10),
-                2l,
-                1l);
-        mockMvc.perform(post("/livro/registrar")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(cadastrarLivroRequest2)))
-                .andDo(print())
-                .andExpect(status().is2xxSuccessful());
-
-
-
-        mockMvc.perform(get("/livro/detalhes/{id}", 3)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().is2xxSuccessful());
-
-        CadastrarPaisRequest cadastrarPaisRequest = new CadastrarPaisRequest("EUA");
-
-        mockMvc.perform(post("/pais/registrar")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(cadastrarPaisRequest)))
-                .andDo(print())
-                .andExpect(status().is2xxSuccessful());
-
-
-        CadastrarEstadoRequest cadastrarEstadoRequest = new CadastrarEstadoRequest("New York", 4l);
-
-
-        mockMvc.perform(post("/estado/pais/{id}", 4l)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(cadastrarEstadoRequest)))
-                .andDo(print())
-                .andExpect(status().is2xxSuccessful());
-
-
-        BigDecimal precoLivroTest = BigDecimal.valueOf(29.80).setScale(2);
-
-        List<NovaCompraItemRequest> listItens = new ArrayList<>();
-        listItens.add(new NovaCompraItemRequest(3l, 1));
-        novoPedidoRequest = new NovoPedidoRequest(precoLivroTest, listItens);
-
-        novaCompraRequest = new NovaCompraRequest(
-                "lucas",
-                "mezuraro",
-                "lucas.mezuraro@zup.com.br",
-                "516.170.390-39",
-                "São Paulo",
-                "Nda",
-                "Guarulhos",
-                4l,
-                5l,
                 "99999999",
                 "00000000",
                 novoPedidoRequest);
