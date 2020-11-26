@@ -9,10 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(
-        name = "compras",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"documento"}, name = "documento")
-        }
+        name = "compras"
 )
 public class Compra {
 
@@ -45,7 +42,10 @@ public class Compra {
 
     private String cep;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
+    private SituacaoCompra situacaoCompra = SituacaoCompra.INICIADA;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Pedido pedido;
 
     public Pedido getPedido() {
@@ -78,6 +78,10 @@ public class Compra {
 
     public String getComplemento() {
         return complemento;
+    }
+
+    public SituacaoCompra getSituacaoCompra() {
+        return situacaoCompra;
     }
 
     public String getCidade() {
