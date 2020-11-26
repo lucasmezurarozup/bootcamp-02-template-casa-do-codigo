@@ -379,8 +379,7 @@ public class LivroControllerTest {
                         .content(objectMapper.writeValueAsString(cadastrarCategoriaRequest)))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
-
-        Thread.sleep(2000);
+        
 
         CadastrarLivroRequest cadastrarLivroRequest2 = new CadastrarLivroRequest("Java3",
                 "E um livro sobre web, java, e outras coisas",

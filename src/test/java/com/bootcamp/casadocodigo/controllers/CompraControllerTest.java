@@ -375,11 +375,11 @@ public class CompraControllerTest {
                 .andExpect(status().is2xxSuccessful());
 
 
-
+        BigDecimal precoLivroTest = BigDecimal.valueOf(29.90).setScale(2);
 
         List<NovaCompraItemRequest> listItens = new ArrayList<>();
         listItens.add(new NovaCompraItemRequest(3l, 1));
-        novoPedidoRequest = new NovoPedidoRequest(BigDecimal.valueOf(10l), listItens);
+        novoPedidoRequest = new NovoPedidoRequest(precoLivroTest, listItens);
 
         novaCompraRequest = new NovaCompraRequest(
                 "lucas",

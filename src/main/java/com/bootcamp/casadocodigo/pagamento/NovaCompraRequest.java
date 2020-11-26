@@ -1,12 +1,14 @@
 package com.bootcamp.casadocodigo.pagamento;
 
 import com.bootcamp.casadocodigo.compartilhado.Existe;
+import com.bootcamp.casadocodigo.livro.Livro;
 import com.bootcamp.casadocodigo.localizacao.estado.Estado;
 import com.bootcamp.casadocodigo.localizacao.pais.Pais;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 
+import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -138,5 +140,26 @@ public class NovaCompraRequest {
 
     public String getCep() {
         return cep;
+    }
+
+    public boolean comparaPrecoItensComEntrada(EntityManager entityManager) {
+        if(pedido.getItens().isEmpty()) return true;
+
+        List<NovaCompraItemRequest> listaItens = pedido.getItens();
+
+        BigDecimal precoContabilizado =  listaItens.stream()
+                .map(itemRequest -> {
+                       Livro livro = entityManager.find(Livro.class, itemRequest.getIdLivro());
+                       BigDecimal precoLivro = livro.getPreco();
+                       BigDecimal quantidade = BigDecimal.valueOf(itemRequest.getQuantidade());
+                       return precoLivro.multiply(quantidade);
+                })
+                .reduce(BigDecimal.valueOf(0),
+                        ((somatorio, valorTotalItem) ->
+                                somatorio.add(valorTotalItem)));
+
+        BigDecimal precoRecebido = this.pedido.getTotal();
+
+        return !precoContabilizado.equals(precoRecebido);
     }
 }

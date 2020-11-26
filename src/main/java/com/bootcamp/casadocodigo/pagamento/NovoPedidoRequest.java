@@ -1,8 +1,10 @@
 package com.bootcamp.casadocodigo.pagamento;
 
+import com.bootcamp.casadocodigo.livro.Livro;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -30,8 +32,13 @@ public class NovoPedidoRequest {
     @NotNull(message = "a compra deve possuir pelo menos um item.")
 
     private List<NovaCompraItemRequest> itens;*/
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
     public BigDecimal getTotal() {
-        return total;
+        return this.total;
     }
 
     public void setItens(List<NovaCompraItemRequest> itens) {
@@ -44,10 +51,6 @@ public class NovoPedidoRequest {
 
     public NovoPedidoRequest() {
 
-    }
-
-    public NovoPedidoRequest(BigDecimal total) {
-        this.total = total;
     }
 
     public NovoPedidoRequest(@Positive @NotNull(message = "o total do pedido é um campo de preenchimento obrigatório.") BigDecimal total,
