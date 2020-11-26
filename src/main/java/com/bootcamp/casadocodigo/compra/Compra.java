@@ -1,13 +1,11 @@
-package com.bootcamp.casadocodigo.pagamento;
+package com.bootcamp.casadocodigo.compra;
 
-import com.bootcamp.casadocodigo.compartilhado.Existe;
 import com.bootcamp.casadocodigo.localizacao.estado.Estado;
 import com.bootcamp.casadocodigo.localizacao.pais.Pais;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Optional;
 
 @Entity
 @Table(

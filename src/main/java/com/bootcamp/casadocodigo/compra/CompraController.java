@@ -1,4 +1,4 @@
-package com.bootcamp.casadocodigo.pagamento;
+package com.bootcamp.casadocodigo.compra;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

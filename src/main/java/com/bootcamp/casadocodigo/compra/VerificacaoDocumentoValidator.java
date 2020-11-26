@@ -1,8 +1,5 @@
-package com.bootcamp.casadocodigo.pagamento;
+package com.bootcamp.casadocodigo.compra;
 
-import org.hibernate.validator.constraints.br.CPF;
-import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
-import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 

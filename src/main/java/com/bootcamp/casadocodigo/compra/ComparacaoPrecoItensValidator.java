@@ -1,13 +1,9 @@
-package com.bootcamp.casadocodigo.pagamento;
+package com.bootcamp.casadocodigo.compra;
 
-import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
 
 public class ComparacaoPrecoItensValidator implements Validator {
 

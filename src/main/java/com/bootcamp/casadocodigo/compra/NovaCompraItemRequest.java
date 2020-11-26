@@ -1,8 +1,7 @@
-package com.bootcamp.casadocodigo.pagamento;
+package com.bootcamp.casadocodigo.compra;
 
 import com.bootcamp.casadocodigo.compartilhado.Existe;
 import com.bootcamp.casadocodigo.livro.Livro;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;

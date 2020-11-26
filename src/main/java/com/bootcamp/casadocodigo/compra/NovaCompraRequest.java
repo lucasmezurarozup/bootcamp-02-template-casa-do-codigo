@@ -1,4 +1,4 @@
-package com.bootcamp.casadocodigo.pagamento;
+package com.bootcamp.casadocodigo.compra;
 
 import com.bootcamp.casadocodigo.compartilhado.Existe;
 import com.bootcamp.casadocodigo.compartilhado.PaisNotFoundException;
@@ -6,7 +6,6 @@ import com.bootcamp.casadocodigo.livro.Livro;
 import com.bootcamp.casadocodigo.localizacao.estado.Estado;
 import com.bootcamp.casadocodigo.localizacao.estado.EstadoNotFoundException;
 import com.bootcamp.casadocodigo.localizacao.pais.Pais;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 
@@ -14,9 +13,7 @@ import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +46,7 @@ public class NovaCompraRequest {
     @Valid
     @NotNull(message = "é necessário possuir um pedido vinculado a compra.")
     private NovoPedidoRequest pedido;
-
+    @Deprecated
     public NovaCompraRequest() {
 
     }

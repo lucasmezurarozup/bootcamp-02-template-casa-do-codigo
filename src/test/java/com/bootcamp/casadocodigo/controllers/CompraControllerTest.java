@@ -5,9 +5,9 @@ import com.bootcamp.casadocodigo.categoria.CadastrarCategoriaRequest;
 import com.bootcamp.casadocodigo.livro.CadastrarLivroRequest;
 import com.bootcamp.casadocodigo.localizacao.estado.CadastrarEstadoRequest;
 import com.bootcamp.casadocodigo.localizacao.pais.CadastrarPaisRequest;
-import com.bootcamp.casadocodigo.pagamento.NovaCompraItemRequest;
-import com.bootcamp.casadocodigo.pagamento.NovaCompraRequest;
-import com.bootcamp.casadocodigo.pagamento.NovoPedidoRequest;
+import com.bootcamp.casadocodigo.compra.NovaCompraItemRequest;
+import com.bootcamp.casadocodigo.compra.NovaCompraRequest;
+import com.bootcamp.casadocodigo.compra.NovoPedidoRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package com.bootcamp.casadocodigo.pagamento;
+package com.bootcamp.casadocodigo.compra;
 
 import com.bootcamp.casadocodigo.compartilhado.LivroNotFoundException;
 import com.bootcamp.casadocodigo.livro.Livro;
