@@ -26,6 +26,6 @@ public class CompraController {
 
     @PostMapping("/nova")
     public ResponseEntity<?> criarCompra(@RequestBody @Valid NovaCompraRequest novaCompraRequest) {
-        return ResponseEntity.ok(novaCompraRequest);
+        return ResponseEntity.ok(novaCompraRequest.toObject(entityManager));
     }
 }

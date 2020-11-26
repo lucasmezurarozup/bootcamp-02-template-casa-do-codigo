@@ -1,8 +1,10 @@
 package com.bootcamp.casadocodigo.pagamento;
 
 import com.bootcamp.casadocodigo.compartilhado.Existe;
+import com.bootcamp.casadocodigo.compartilhado.PaisNotFoundException;
 import com.bootcamp.casadocodigo.livro.Livro;
 import com.bootcamp.casadocodigo.localizacao.estado.Estado;
+import com.bootcamp.casadocodigo.localizacao.estado.EstadoNotFoundException;
 import com.bootcamp.casadocodigo.localizacao.pais.Pais;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
@@ -16,6 +18,7 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class NovaCompraRequest {
 
@@ -161,5 +164,24 @@ public class NovaCompraRequest {
         BigDecimal precoRecebido = this.pedido.getTotal();
 
         return !precoContabilizado.equals(precoRecebido);
+    }
+
+    public Compra toObject(EntityManager entityManager) {
+
+        Optional<Pais> pais = Optional.ofNullable(entityManager.find(Pais.class, this.idPais));
+        Optional<Estado> estado = Optional.ofNullable(entityManager.find(Estado.class, this.idEstado));
+
+        return new Compra(nome,
+                sobrenome,
+                email,
+                documento,
+                endereco,
+                complemento,
+                cidade,
+                pais.orElseThrow(() -> new PaisNotFoundException("o pais com o id "+ idPais+" não foi encontrado em nosso banco de dados.")),
+                estado.orElseThrow(() -> new EstadoNotFoundException("o estado com o id "+ idPais+" não foi encontrado em nosso banco de dados.")),
+                telefone,
+                cep,
+                pedido.toObject(entityManager));
     }
 }

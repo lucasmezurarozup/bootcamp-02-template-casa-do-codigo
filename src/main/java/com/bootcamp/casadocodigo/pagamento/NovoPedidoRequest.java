@@ -1,18 +1,19 @@
 package com.bootcamp.casadocodigo.pagamento;
 
+import com.bootcamp.casadocodigo.compartilhado.LivroNotFoundException;
 import com.bootcamp.casadocodigo.livro.Livro;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class NovoPedidoRequest {
@@ -57,5 +58,20 @@ public class NovoPedidoRequest {
                              @Size(min = 1) @Valid @NotNull(message = "a compra deve possuir pelo menos um item.") List<NovaCompraItemRequest> itens) {
         this.total = total;
         this.itens = itens;
+    }
+
+    public Pedido toObject(EntityManager entityManager) {
+
+         List<PedidoItem> pedidoItens = itens.stream()
+                 .map(livro -> {
+                     Livro livroRecebido = Optional.ofNullable(entityManager.find(Livro.class, livro.getIdLivro()))
+                             .orElseThrow(() ->
+                                     new LivroNotFoundException("o livro com o id "+livro.getIdLivro()+" não foi encontrado em nosso banco de dados."));
+                     return new PedidoItem(livroRecebido, livro.getQuantidade());
+                 }).collect(Collectors.toList());
+
+         return new Pedido(total, pedidoItens);
+
+
     }
 }

@@ -24,7 +24,7 @@ public class Estado {
     private String nomeEstado;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Pais pais;
 
     public Estado(@NotBlank String nome,@NotBlank Pais pais) {
