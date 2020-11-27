@@ -5,6 +5,7 @@ import com.bootcamp.casadocodigo.compartilhado.LivroNotFoundException;
 import com.bootcamp.casadocodigo.cupom.Cupom;
 import com.bootcamp.casadocodigo.livro.Livro;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -35,6 +36,17 @@ public class NovoPedidoRequest {
 
     private String cupom;
 
+    @JsonIgnore
+    private boolean cupomValido;
+
+    public String getCupom() {
+        return cupom;
+    }
+
+    public boolean isCupomValido() {
+        return cupomValido;
+    }
+
     public void setTotal(BigDecimal total) {
         this.total = total;
     }
@@ -63,9 +75,8 @@ public class NovoPedidoRequest {
         this.cupom = cupom;
     }
 
-    public Pedido toObject(EntityManager entityManager) {
-
-        Optional<Cupom> desconto;
+    public Optional<Cupom> validaPossibilidadeDesconto(EntityManager entityManager) {
+        Optional<Cupom> desconto = null;
 
         if(cupom != null) {
             Query query = entityManager.createQuery("SELECT c FROM Cupom c WHERE c.codigo = :codigo");
@@ -74,23 +85,27 @@ public class NovoPedidoRequest {
                 desconto = Optional.ofNullable((Cupom) query.getSingleResult());
 
                 desconto.ifPresent((cupomExistente) -> {
-                      if(cupomExistente.getDataValidade().isAfter(LocalDate.now())) {
-                           System.out.println("Desconto: codigo (" + cupomExistente.getCodigo() + ") validade: (" + cupomExistente.getDataValidade() + ") " + " percentualDesconto: (" + cupomExistente.getPercentualDesconto() + "))");
-                      }else {
-                           throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cupom "+ cupom + " cadastrado encontra-se expirado.");
-                      }
+                    if(cupomExistente.getDataValidade().isAfter(LocalDate.now())) {
+                        System.out.println("Desconto: codigo (" + cupomExistente.getCodigo() + ") validade: (" + cupomExistente.getDataValidade() + ") " + " percentualDesconto: (" + cupomExistente.getPercentualDesconto() + "))");
+                    }else {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cupom "+ cupom + " cadastrado encontra-se expirado.");
+                    }
                 });
             }catch(NoResultException e) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cupom "+ cupom + " não encontrado na nossa base de dados.");
             }
         }
 
-         List<PedidoItem> pedidoItens = validaExistenciaLivrosSelecionadosCompra(itens, entityManager);
+        return desconto;
+    }
 
+    public Pedido toObject(EntityManager entityManager) {
+         List<PedidoItem> pedidoItens = validaExistenciaLivrosSelecionadosCompra(itens, entityManager);
          return new Pedido(total, pedidoItens);
     }
 
     public List<PedidoItem> validaExistenciaLivrosSelecionadosCompra(List<NovaCompraItemRequest> pedidoItens, EntityManager entityManager) {
+
         return itens.stream()
                 .map(livro -> {
                     Livro livroRecebido = Optional.ofNullable(entityManager.find(Livro.class, livro.getIdLivro()))

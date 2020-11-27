@@ -2,6 +2,7 @@ package com.bootcamp.casadocodigo.compra;
 
 import com.bootcamp.casadocodigo.compartilhado.Existe;
 import com.bootcamp.casadocodigo.compartilhado.PaisNotFoundException;
+import com.bootcamp.casadocodigo.cupom.Cupom;
 import com.bootcamp.casadocodigo.livro.Livro;
 import com.bootcamp.casadocodigo.localizacao.estado.Estado;
 import com.bootcamp.casadocodigo.localizacao.estado.EstadoNotFoundException;
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -148,19 +150,31 @@ public class NovaCompraRequest {
         List<NovaCompraItemRequest> listaItens = pedido.getItens();
 
         BigDecimal precoContabilizado =  listaItens.stream()
-                .map(itemRequest -> {
-                       Livro livro = entityManager.find(Livro.class, itemRequest.getIdLivro());
-                       BigDecimal precoLivro = livro.getPreco();
-                       BigDecimal quantidade = BigDecimal.valueOf(itemRequest.getQuantidade());
+                .map(item -> {
+                       Livro livro = entityManager.find(Livro.class, item.getIdLivro());
+                       Optional<Cupom> cupomRecebido = pedido.validaPossibilidadeDesconto(entityManager);
+                       BigDecimal precoLivro = aplicaPreco(cupomRecebido.get(), livro);
+                       BigDecimal quantidade = BigDecimal.valueOf(item.getQuantidade());
                        return precoLivro.multiply(quantidade);
                 })
                 .reduce(BigDecimal.valueOf(0),
                         ((somatorio, valorTotalItem) ->
-                                somatorio.add(valorTotalItem)));
+                                somatorio.add(valorTotalItem))).setScale(2, RoundingMode.HALF_DOWN);
 
-        BigDecimal precoRecebido = this.pedido.getTotal();
-
+        BigDecimal precoRecebido = this.pedido.getTotal().setScale(2, RoundingMode.HALF_DOWN);
+        System.out.println("precoRecebido: "+precoRecebido +" precoContabilizado: "+precoContabilizado);
         return !precoContabilizado.equals(precoRecebido);
+    }
+
+    public BigDecimal aplicaPreco(Cupom cupom, Livro livro) {
+        BigDecimal precoLivro;
+        if(cupom != null) {
+            BigDecimal precoDescontado = cupom.getPercentualDesconto().multiply(livro.getPreco());
+            precoLivro = livro.getPreco().subtract(precoDescontado);
+        }else {
+            precoLivro = livro.getPreco();
+        }
+        return precoLivro;
     }
 
     public Compra toObject(EntityManager entityManager) {
