@@ -11,5 +11,18 @@ public class PedidoItemDetalhesResponse {
 
     @NotNull
     private int quantidade;
+
+    public LivroDetalhesResponse getLivro() {
+        return livro;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public PedidoItemDetalhesResponse(PedidoItem pedidoItem) {
+        this.livro = new LivroDetalhesResponse(pedidoItem.getLivro());
+        this.quantidade = pedidoItem.getQuantidade();
+    }
 }
 

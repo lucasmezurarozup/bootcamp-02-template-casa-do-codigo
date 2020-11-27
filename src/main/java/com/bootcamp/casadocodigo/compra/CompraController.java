@@ -42,7 +42,8 @@ public class CompraController {
     public ResponseEntity<?> detalhesCompra(@PathVariable("id") Long id) {
         System.out.println("Long: "+ id);
         Compra compra = compraRepository.findById(id).orElse(null);
-        return ResponseEntity.ok(compra);
+        CompraDetalhesResponse compraDetalhesResponse = new CompraDetalhesResponse(compra);
+        return ResponseEntity.ok(compraDetalhesResponse);
 
     }
 }

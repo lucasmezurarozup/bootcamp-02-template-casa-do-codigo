@@ -49,6 +49,17 @@ public class LivroDetalhesResponse {
         this.autorDetalhesResponse = autor;
     }
 
+    public LivroDetalhesResponse(Livro livro) {
+        this.titulo = livro.getTitulo();
+        this.autorDetalhesResponse = new AutorDetalhesResponse(livro.getAutor().getNome(), livro.getAutor().getDescricao());
+        this.categoriaDetalhesResponse = new CategoriaDetalhesResponse(livro.getCategoria().getNome());
+        this.resumo = livro.getResumo();
+        this.sumario = livro.getSumario();
+        this.numeroPaginas = livro.getNumeroPaginas();
+        this.isbn = livro.getIsbn();
+        this.preco = livro.getPreco();
+    }
+
     public String getTitulo() {
         return titulo;
     }
