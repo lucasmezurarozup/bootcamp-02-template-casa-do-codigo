@@ -1,5 +1,6 @@
 package com.bootcamp.casadocodigo.cupom;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +17,13 @@ import javax.validation.Valid;
 @RequestMapping("/cupom")
 public class CupomController {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private CupomRepository cupomRepository;
 
     @PostMapping("/novo")
     public ResponseEntity<?> criarCupom(@RequestBody @Valid NovoCupomRequest novoCupomRequest) {
-        return ResponseEntity.ok(novoCupomRequest);
+        Cupom cupom = cupomRepository.save(novoCupomRequest.toObject(cupomRepository));
+        return ResponseEntity.ok(cupom);
     }
 
 }

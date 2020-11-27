@@ -1,8 +1,14 @@
 package com.bootcamp.casadocodigo.cupom;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class NovoCupomRequest {
 
@@ -40,5 +46,15 @@ public class NovoCupomRequest {
         this.codigo = codigo;
         this.percentualDesconto = percentualDesconto;
         this.dataValidade = dataValidade;
+    }
+
+    public Cupom toObject(CupomRepository cupomRepository) {
+        Optional<Cupom> existeCupom = cupomRepository.findByCodigo(codigo);
+
+        existeCupom.ifPresent(cupom -> {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "o cupom "+cupom.getCodigo()+" já existe em nosso banco de dados.");
+        });
+
+        return new Cupom(this.codigo, this.percentualDesconto, this.dataValidade);
     }
 }
