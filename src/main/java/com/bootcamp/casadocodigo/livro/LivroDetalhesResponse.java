@@ -25,10 +25,10 @@ public class LivroDetalhesResponse {
     private String isbn;
 
     @NotNull(message = "catégoria é um campo de preenchimento obrigatório.")
-    private CategoriaDetalhesResponse categoriaDetalhesResponse;
+    private CategoriaDetalhesResponse categoria;
 
     @NotNull(message = "autor é um campo de preenchimento obrigatório.")
-    private AutorDetalhesResponse autorDetalhesResponse;
+    private AutorDetalhesResponse autor;
 
     public LivroDetalhesResponse(
             @NotBlank(message = "título é um campo de preenchimento obrigatório.") String titulo,
@@ -45,14 +45,14 @@ public class LivroDetalhesResponse {
         this.preco = preco;
         this.numeroPaginas = numeroPaginas;
         this.isbn = isbn;
-        this.categoriaDetalhesResponse = categoria;
-        this.autorDetalhesResponse = autor;
+        this.categoria = categoria;
+        this.autor = autor;
     }
 
     public LivroDetalhesResponse(Livro livro) {
         this.titulo = livro.getTitulo();
-        this.autorDetalhesResponse = new AutorDetalhesResponse(livro.getAutor().getNome(), livro.getAutor().getDescricao());
-        this.categoriaDetalhesResponse = new CategoriaDetalhesResponse(livro.getCategoria().getNome());
+        this.autor = new AutorDetalhesResponse(livro.getAutor().getNome(), livro.getAutor().getDescricao());
+        this.categoria = new CategoriaDetalhesResponse(livro.getCategoria().getNome());
         this.resumo = livro.getResumo();
         this.sumario = livro.getSumario();
         this.numeroPaginas = livro.getNumeroPaginas();
@@ -84,11 +84,11 @@ public class LivroDetalhesResponse {
         return isbn;
     }
 
-    public AutorDetalhesResponse getAutorDetalhesResponse() {
-        return autorDetalhesResponse;
+    public AutorDetalhesResponse getAutor() {
+        return autor;
     }
 
-    public CategoriaDetalhesResponse getCategoriaDetalhesResponse() {
-        return categoriaDetalhesResponse;
+    public CategoriaDetalhesResponse getCategoria() {
+        return categoria;
     }
 }

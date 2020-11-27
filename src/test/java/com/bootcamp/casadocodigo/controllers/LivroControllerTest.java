@@ -414,9 +414,9 @@ public class LivroControllerTest {
         Assertions.assertThat(cadastrarLivroRequest2.getNumeroPaginas()).isEqualTo(livroDetalhesResponse.getNumeroPaginas());
         Assertions.assertThat(cadastrarLivroRequest2.getIsbn()).isEqualTo(livroDetalhesResponse.getIsbn());
         Assertions.assertThat(cadastrarCategoriaRequest.getNome())
-                .isEqualTo(livroDetalhesResponse.getCategoriaDetalhesResponse().getNome());
-        Assertions.assertThat(cadastrarAutorRequest.getNome()).isEqualTo(livroDetalhesResponse.getAutorDetalhesResponse().getNome());
-        Assertions.assertThat(cadastrarAutorRequest.getDescricao()).isEqualTo(livroDetalhesResponse.getAutorDetalhesResponse().getDescricao());
+                .isEqualTo(livroDetalhesResponse.getCategoria().getNome());
+        Assertions.assertThat(cadastrarAutorRequest.getNome()).isEqualTo(livroDetalhesResponse.getAutor().getNome());
+        Assertions.assertThat(cadastrarAutorRequest.getDescricao()).isEqualTo(livroDetalhesResponse.getAutor().getDescricao());
     }
 
 

@@ -13,7 +13,7 @@ public class PedidoDetalhesResponse {
     private BigDecimal totalComDesconto;
 
     @NotNull
-    private DescontoResponse descontoResponse;
+    private DescontoResponse desconto;
 ;
     @NotNull
     private List<PedidoItemDetalhesResponse> itens = new ArrayList<PedidoItemDetalhesResponse>();
@@ -27,8 +27,8 @@ public class PedidoDetalhesResponse {
         return totalComDesconto;
     }
 
-    public DescontoResponse getDescontoResponse() {
-        return descontoResponse;
+    public DescontoResponse getDesconto() {
+        return desconto;
     }
 
     public List<PedidoItemDetalhesResponse> getItens() {
@@ -47,9 +47,9 @@ public class PedidoDetalhesResponse {
                 (subTotal, precoItem) -> subTotal.add(precoItem));
         this.totalComDesconto = pedido.getTotal();
         if (pedido.getCupom() != null) {
-            this.descontoResponse = new DescontoResponse(true, pedido.getCupom().getPercentualDesconto());
+            this.desconto = new DescontoResponse(true, pedido.getCupom().getPercentualDesconto());
         }else {
-            this.descontoResponse = new DescontoResponse(false, null);
+            this.desconto = new DescontoResponse(false, null);
         }
         this.itens = pedido.getItens().stream().map(pedidoItem -> new PedidoItemDetalhesResponse(pedidoItem)).collect(Collectors.toList());
     }
