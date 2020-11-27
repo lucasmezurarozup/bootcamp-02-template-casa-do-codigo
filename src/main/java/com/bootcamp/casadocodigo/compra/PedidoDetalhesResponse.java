@@ -41,6 +41,10 @@ public class PedidoDetalhesResponse {
     }
 
     public PedidoDetalhesResponse(Pedido pedido) {
+        this.totalSemDesconto = pedido.getItens().stream().map(pedidoItem -> {
+           return pedidoItem.getLivro().getPreco().multiply(BigDecimal.valueOf(pedidoItem.getQuantidade()));
+        }).reduce(BigDecimal.ZERO,
+                (subTotal, precoItem) -> subTotal.add(precoItem));
         this.totalComDesconto = pedido.getTotal();
         if (pedido.getCupom() != null) {
             this.descontoResponse = new DescontoResponse(true, pedido.getCupom().getPercentualDesconto());
