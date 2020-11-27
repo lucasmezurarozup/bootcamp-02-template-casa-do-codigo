@@ -1,6 +1,8 @@
 package com.bootcamp.casadocodigo.compra;
 
 import com.bootcamp.casadocodigo.cupom.Cupom;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -21,10 +23,12 @@ public class Pedido {
 
     @Size(min = 1)
     @NotNull
-    @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pedido_id")
     private List<PedidoItem> itens;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Cupom cupom;
 
     public Cupom getCupom() {
@@ -44,7 +48,7 @@ public class Pedido {
     }
 
     @Deprecated
-    private Pedido() {
+    public Pedido() {
 
     }
 

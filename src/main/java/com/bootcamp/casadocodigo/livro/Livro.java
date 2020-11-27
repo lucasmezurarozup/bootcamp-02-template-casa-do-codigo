@@ -65,7 +65,7 @@ public class Livro {
     }
 
     @Deprecated
-    private Livro() {
+    public Livro() {
 
     }
 

@@ -18,16 +18,13 @@ public class PedidoItem {
     private Long id;
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private Livro livro;
 
     @Positive
     @NotNull
     private int quantidade;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Pedido pedido;
 
     public PedidoItem(@NotNull Livro livro, @NotNull int quantidade) {
         this.livro = livro;
@@ -35,7 +32,7 @@ public class PedidoItem {
     }
 
     @Deprecated
-    private PedidoItem() {
+    public PedidoItem() {
 
     }
 

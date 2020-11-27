@@ -27,7 +27,7 @@ public class Pais {
     private List<Estado> estados;
 
     @Deprecated
-    private Pais() {
+    public Pais() {
 
     }
 

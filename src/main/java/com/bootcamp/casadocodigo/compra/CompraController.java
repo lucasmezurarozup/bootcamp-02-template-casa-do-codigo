@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 @Validated
 @RestController
@@ -35,5 +36,13 @@ public class CompraController {
         Compra compra = compraRepository.save(novaCompraRequest.toObject(entityManager));
         URI location = uriComponentsBuilder.path("/compra/detalhes/{id}").buildAndExpand(compra.getId()).toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping("/detalhes/{id}")
+    public ResponseEntity<?> detalhesCompra(@PathVariable("id") Long id) {
+        System.out.println("Long: "+ id);
+        Compra compra = compraRepository.findById(id).orElse(null);
+        return ResponseEntity.ok(compra);
+
     }
 }

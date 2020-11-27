@@ -33,7 +33,7 @@ public class Estado {
     }
 
     @Deprecated
-    private Estado() {
+    public Estado() {
 
     }
 

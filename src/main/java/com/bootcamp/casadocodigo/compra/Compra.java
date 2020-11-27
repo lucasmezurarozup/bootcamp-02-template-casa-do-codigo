@@ -32,10 +32,10 @@ public class Compra {
     @NotBlank(message = "cidade é um campo de preenchimento obrigatório.")
     private String cidade;
     @NotNull(message = "país é um campo de preenchimento obrigatório.")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private Pais pais;
     @NotNull(message = "estado é um campo de preenchimento obrigatório.")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private Estado estado;
     @NotBlank(message = "telefone é um campo de preenchimento obrigatório.")
     private String telefone;
@@ -45,7 +45,7 @@ public class Compra {
     @Enumerated(EnumType.STRING)
     private SituacaoCompra situacaoCompra = SituacaoCompra.INICIADA;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private Pedido pedido;
 
     public Pedido getPedido() {
@@ -132,5 +132,10 @@ public class Compra {
         this.telefone = telefone;
         this.cep = cep;
         this.pedido = pedido;
+    }
+
+    @Deprecated
+    public Compra() {
+
     }
 }
