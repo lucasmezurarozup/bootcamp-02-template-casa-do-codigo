@@ -81,7 +81,7 @@ public class CompraRepositoryTest {
 
         pedidoItems = new ArrayList<>();
         pedidoItems.add(new PedidoItem(livro, 1));
-        pedido = new Pedido(precoLivroTest, pedidoItems);
+        pedido = new Pedido(precoLivroTest, pedidoItems, null);
 
 
         compra = new Compra(

@@ -488,7 +488,7 @@ public class CompraControllerTest {
     }
 
     @Test
-    public void testandoRotaCompraComCupomCadastradoSemAlterarPrecoAinda() throws Exception {
+    public void testandoRotaCompraComCupomCadastradoSemAlterarPreco() throws Exception {
 
         CadastrarAutorRequest cadastrarAutorRequest = new CadastrarAutorRequest("luiz", "luiz.mezuraroa@zup.com.br", "Teste");
         mockMvc.perform(post("/autor/registrar")
@@ -580,6 +580,6 @@ public class CompraControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(novaCompraRequest)))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isBadRequest());
     }
 }

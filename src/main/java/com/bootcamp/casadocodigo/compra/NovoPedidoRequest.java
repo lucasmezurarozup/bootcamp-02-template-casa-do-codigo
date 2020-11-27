@@ -75,22 +75,22 @@ public class NovoPedidoRequest {
         this.cupom = cupom;
     }
 
-    public Optional<Cupom> validaPossibilidadeDesconto(EntityManager entityManager) {
-        Optional<Cupom> desconto = null;
+    public Cupom validaPossibilidadeDesconto(EntityManager entityManager) {
+        Cupom desconto = null;
 
         if(cupom != null) {
             Query query = entityManager.createQuery("SELECT c FROM Cupom c WHERE c.codigo = :codigo");
             query.setParameter("codigo", cupom);
             try {
-                desconto = Optional.ofNullable((Cupom) query.getSingleResult());
+                desconto = (Cupom) query.getSingleResult();
 
-                desconto.ifPresent((cupomExistente) -> {
-                    if(cupomExistente.getDataValidade().isAfter(LocalDate.now())) {
-                        System.out.println("Desconto: codigo (" + cupomExistente.getCodigo() + ") validade: (" + cupomExistente.getDataValidade() + ") " + " percentualDesconto: (" + cupomExistente.getPercentualDesconto() + "))");
+                if(desconto != null) {
+                    if(desconto.getDataValidade().isAfter(LocalDate.now())) {
+                        System.out.println("Desconto: codigo (" + desconto.getCodigo() + ") validade: (" + desconto.getDataValidade() + ") " + " percentualDesconto: (" + desconto.getPercentualDesconto() + "))");
                     }else {
                         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cupom "+ cupom + " cadastrado encontra-se expirado.");
                     }
-                });
+                }
             }catch(NoResultException e) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cupom "+ cupom + " não encontrado na nossa base de dados.");
             }
@@ -101,7 +101,8 @@ public class NovoPedidoRequest {
 
     public Pedido toObject(EntityManager entityManager) {
          List<PedidoItem> pedidoItens = validaExistenciaLivrosSelecionadosCompra(itens, entityManager);
-         return new Pedido(total, pedidoItens);
+         Cupom cupom = validaPossibilidadeDesconto(entityManager);
+         return new Pedido(total, pedidoItens, cupom);
     }
 
     public List<PedidoItem> validaExistenciaLivrosSelecionadosCompra(List<NovaCompraItemRequest> pedidoItens, EntityManager entityManager) {

@@ -152,8 +152,8 @@ public class NovaCompraRequest {
         BigDecimal precoContabilizado =  listaItens.stream()
                 .map(item -> {
                        Livro livro = entityManager.find(Livro.class, item.getIdLivro());
-                       Optional<Cupom> cupomRecebido = pedido.validaPossibilidadeDesconto(entityManager);
-                       BigDecimal precoLivro = aplicaPreco(cupomRecebido.get(), livro);
+                       Cupom cupomRecebido = pedido.validaPossibilidadeDesconto(entityManager);
+                       BigDecimal precoLivro = aplicaPreco(cupomRecebido, livro);
                        BigDecimal quantidade = BigDecimal.valueOf(item.getQuantidade());
                        return precoLivro.multiply(quantidade);
                 })
