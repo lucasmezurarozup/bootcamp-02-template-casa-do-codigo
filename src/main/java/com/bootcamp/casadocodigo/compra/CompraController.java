@@ -1,10 +1,12 @@
 package com.bootcamp.casadocodigo.compra;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.EntityManager;
@@ -41,7 +43,7 @@ public class CompraController {
     @GetMapping("/detalhes/{id}")
     public ResponseEntity<?> detalhesCompra(@PathVariable("id") Long id) {
         System.out.println("Long: "+ id);
-        Compra compra = compraRepository.findById(id).orElse(null);
+        Compra compra = compraRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "compra com o id: "+id+" não foi encontrada em nosso banco de dados."));
         CompraDetalhesResponse compraDetalhesResponse = new CompraDetalhesResponse(compra);
         return ResponseEntity.ok(compraDetalhesResponse);
 
